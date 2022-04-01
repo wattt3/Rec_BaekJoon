@@ -1,8 +1,8 @@
 import { TypedUseSelectorHook, useSelector } from "react-redux";
-import { HomeState } from "./state";
+import { UserState } from "./state";
 
 export interface CombinedState {
-  homeState: HomeState;
+  userState: UserState;
 }
 
 export const useCombinedStateSelector: TypedUseSelectorHook<CombinedState> =

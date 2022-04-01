@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { HomeState } from "../state";
+import { UserState } from "../state";
 
-const homeSlice = createSlice({
-  name: "HOME",
+const userSlice = createSlice({
+  name: "USER",
   initialState: {
     userNames: [],
-  } as HomeState,
+  } as UserState,
   reducers: {
     addUserName(state, action: PayloadAction<string>) {
       const userNames = [...state.userNames];
@@ -20,5 +20,5 @@ const homeSlice = createSlice({
   },
 });
 
-export const { addUserName } = homeSlice.actions;
-export default homeSlice.reducer;
+export const { addUserName } = userSlice.actions;
+export default userSlice.reducer;

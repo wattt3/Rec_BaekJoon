@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import homeSlice from "../slices/homeSlice";
+import userSlice from "../slices/userSlice";
 
 const persistConfig = {
   key: "root",
@@ -16,6 +16,6 @@ const persistConfig = {
 export const rootReducer = persistReducer(
   persistConfig,
   combineReducers({
-    homeState: homeSlice,
+    userState: userSlice,
   })
 );
