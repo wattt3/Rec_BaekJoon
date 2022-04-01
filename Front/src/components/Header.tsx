@@ -22,23 +22,6 @@ const Header = () => {
             </section>
           </Link>
         </div>
-        {/* header right */}
-        <div className="flex justify-center items-center gap-5">
-          <Link to={routes.LOGIN}>
-            <section className="text-black  p-3 px-5 hover:bg-slate-300 rounded-2xl transition-all duration-300 cursor-pointer">
-              로그인
-            </section>
-          </Link>
-          <Link to={routes.JOIN}>
-            <section className="text-black  p-3 px-5 hover:bg-slate-300 rounded-2xl transition-all duration-300 cursor-pointer">
-              회원가입
-            </section>
-          </Link>
-          <FontAwesomeIcon
-            className="text-3xl text-slate-700 cursor-pointer"
-            icon={faUserCircle}
-          />
-        </div>
       </div>
     </header>
   );
