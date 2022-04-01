@@ -4,17 +4,17 @@ import { UserState } from "../state";
 const userSlice = createSlice({
   name: "USER",
   initialState: {
-    userNames: [],
+    favoriteUserNames: [],
   } as UserState,
   reducers: {
     addUserName(state, action: PayloadAction<string>) {
-      const userNames = [...state.userNames];
-      if (!userNames.includes(action.payload)) {
-        userNames.push(action.payload);
+      const favoriteUserNames = [...state.favoriteUserNames];
+      if (!favoriteUserNames.includes(action.payload)) {
+        favoriteUserNames.push(action.payload);
       }
       return {
         ...state,
-        userNames,
+        favoriteUserNames,
       };
     },
   },

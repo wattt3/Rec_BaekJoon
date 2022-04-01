@@ -3,7 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInnosoft } from "@fortawesome/free-brands-svg-icons";
 import PageTitle from "../components/PageTitle";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../App";
 
 interface IHomeSequence {
   id: number;
@@ -33,6 +35,30 @@ const HomeSequence: React.FC<IHomeSequence> = ({ description, id }) => {
   );
 };
 
+const UserNameInput: React.FC = () => {
+  const navigate = useNavigate();
+
+  const onKeyDownHandler = (e: React.KeyboardEvent) => {
+    if (e.key != "Enter") {
+      return;
+    }
+    const userName = (document.getElementById("user-name") as HTMLInputElement)
+      .value as string;
+    console.log("user name: ", userName);
+    return navigate(routes.PROBLEM_RECOMMEND);
+  };
+
+  return (
+    <input
+      id="user-name"
+      onKeyDown={onKeyDownHandler}
+      className="w-full px-3 py-1 outline-none text-slate-700 text-center"
+      placeholder="백준아이디"
+      required
+    ></input>
+  );
+};
+
 function Home() {
   return (
     <Container>
@@ -45,6 +71,7 @@ function Home() {
           />
           <h1 className="text-5xl font-bold">백준 문제 추천</h1>
         </section>
+        <UserNameInput />
         <HomeSequence
           id={0}
           description={["백준의 문제들을 추천해 드립니다."]}

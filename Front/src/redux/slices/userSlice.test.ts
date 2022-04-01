@@ -9,17 +9,17 @@ test("초기 상태 확인", () => {
 
 test("Add user's name which is not included", () => {
   const previousState: UserState = {
-    userNames: ["templer151"],
+    favoriteUserNames: ["templer151"],
   };
 
   expect(reducer(previousState, addUserName("anotherUser"))).toEqual({
-    userNames: ["templer151", "anotherUser"],
+    favoriteUserNames: ["templer151", "anotherUser"],
   });
 });
 
 test("Do not add users's name which is included", () => {
   const previousState: UserState = {
-    userNames: ["templer151"],
+    favoriteUserNames: ["templer151"],
   };
 
   expect(reducer(previousState, addUserName("templer151"))).toEqual({
