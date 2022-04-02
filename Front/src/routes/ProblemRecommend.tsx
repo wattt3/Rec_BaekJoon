@@ -10,8 +10,8 @@ const ProblemRecommend = () => {
       <PageTitle title="문제 추천" />
       <main className="mx-auto max-w-screen-lg w-full min-h-screen">
         <div className="p-5 w-full flex flex-wrap">
-          {Array.from(Array(30).keys()).map((item) => {
-            return <ProblemCard item={item} />;
+          {Array.from(Array(30).keys()).map((item, index) => {
+            return <ProblemCard item={item} key={index} />;
           })}
         </div>
       </main>

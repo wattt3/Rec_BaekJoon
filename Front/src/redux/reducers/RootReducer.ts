@@ -9,7 +9,6 @@ const persistConfig = {
   // local storage
   storage: storage,
 
-  // 지금은 사용자의 로그인 정보만 storage에 저장
   whitelist: ["userState"],
 };
 
