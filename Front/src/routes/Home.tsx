@@ -159,7 +159,7 @@ const UserNameInput: React.FC = () => {
       );
     }
 
-    if (!isPopUpHidden && historyUserName.length != 0 && !isHistoryClicked) {
+    if (!isPopUpHidden && favoriteUserName.length != 0 && !isHistoryClicked) {
       return (
         <div className={popUpStyle} ref={expandedPopUp}>
           <button
