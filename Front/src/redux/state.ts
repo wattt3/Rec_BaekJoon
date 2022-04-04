@@ -29,4 +29,7 @@ export interface ProblemMetadata {
 
   // 문제의 태그들 (solved.ac 에서는 tags.key)
   tags: string[];
+
+  // 백준으로 넘어갈 수 있는 링크
+  link: string;
 }
