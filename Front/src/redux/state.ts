@@ -5,4 +5,7 @@ export interface UserState {
 
   // 유저가 최근에 검색한 아이디들
   historyUserNames: string[];
+
+  // 유저가 현재 검색한 아이디
+  currentUserName: string | undefined;
 }
