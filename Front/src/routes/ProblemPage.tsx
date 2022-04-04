@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { checkUserNameRequest, checkUserNameResponse } from "../api/user";
 import Container from "../components/Container";
@@ -6,14 +6,25 @@ import PageTitle from "../components/PageTitle";
 import { useCombinedStateSelector } from "../redux/hook";
 import { addUserName } from "../redux/slices/userSlice";
 
+enum SearchState {
+  SEARCHING,
+  SUCESS,
+  FAIL,
+  UNKNOWN,
+}
+
 function ProblemPage() {
   const currentUserName = useCombinedStateSelector(
     (state) => state.userState.currentUserName
   );
+
+  const [searchState, setSearchState] = useState(SearchState.SEARCHING);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!currentUserName) {
+      setSearchState(SearchState.UNKNOWN);
       return;
     }
 
@@ -31,13 +42,18 @@ function ProblemPage() {
       .then((response: checkUserNameResponse) => {
         if (response.err) {
           console.log(response.err);
+          setSearchState(SearchState.UNKNOWN);
           return;
         }
 
         if (response.result) {
           dispatch(addUserName(currentUserName, /* isHistory */ true));
 
-          //여기에 문제를 검색하는 api가 들어와야함.
+          // 여기에 문제를 검색하는 api가 들어와야함.
+
+          setSearchState(SearchState.SUCESS);
+        } else {
+          setSearchState(SearchState.FAIL);
         }
       });
   }, []);
