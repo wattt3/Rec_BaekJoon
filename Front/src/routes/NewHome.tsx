@@ -72,7 +72,7 @@ const UserNameInput: React.FC = () => {
     const popUpStyle =
       "absolute top-[100%] w-full outline-none text-slate-700 text-left bg-white grid grid-cols-2 border-t border-gray-200 text-center z-10 shadow-xl rounded-bl-md rounded-br-md ";
 
-    if (!isPopUpHidden && historyUserName?.length == 0 && isHistoryClicked) {
+    if (!isPopUpHidden && historyUserName.length == 0 && isHistoryClicked) {
       return (
         <div className={popUpStyle} ref={expandedPopUp}>
           <button className="py-2" onClick={historyOnClickHandler}>
@@ -91,7 +91,7 @@ const UserNameInput: React.FC = () => {
       );
     }
 
-    if (!isPopUpHidden && historyUserName?.length != 0 && isHistoryClicked) {
+    if (!isPopUpHidden && historyUserName.length != 0 && isHistoryClicked) {
       return (
         <div className={popUpStyle} ref={expandedPopUp}>
           <button className="py-2" onClick={historyOnClickHandler}>
@@ -108,7 +108,7 @@ const UserNameInput: React.FC = () => {
       );
     }
 
-    if (!isPopUpHidden && favoriteUserName?.length == 0 && !isHistoryClicked) {
+    if (!isPopUpHidden && favoriteUserName.length == 0 && !isHistoryClicked) {
       return (
         <div className={popUpStyle} ref={expandedPopUp}>
           <button
@@ -127,7 +127,7 @@ const UserNameInput: React.FC = () => {
       );
     }
 
-    if (!isPopUpHidden && favoriteUserName?.length != 0 && !isHistoryClicked) {
+    if (!isPopUpHidden && favoriteUserName.length != 0 && !isHistoryClicked) {
       return (
         <div className={popUpStyle} ref={expandedPopUp}>
           <button
