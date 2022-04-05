@@ -4,6 +4,7 @@ interface IPageTitle {
   title: string;
 }
 
+// eslint-disable-next-line react/prop-types
 const PageTitle: React.FC<IPageTitle> = ({ title }) => {
   return (
     <Helmet>

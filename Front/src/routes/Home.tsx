@@ -80,7 +80,7 @@ const UserNameInput: React.FC = () => {
     (state) => state.userState.historyUserNames
   );
 
-  const historyUserNameButtons = historyUserName.map((userName, index) => {
+  const historyUserNameButtons = historyUserName?.map((userName, index) => {
     return <button key={index}>{userName}</button>;
   });
 
@@ -88,7 +88,7 @@ const UserNameInput: React.FC = () => {
     (state) => state.userState.favoriteUserNames
   );
 
-  const favoriteUserNameButtons = favoriteUserName.map((userName, index) => {
+  const favoriteUserNameButtons = favoriteUserName?.map((userName, index) => {
     return <button key={index}>{userName}</button>;
   });
 
@@ -104,7 +104,7 @@ const UserNameInput: React.FC = () => {
     const popUpStyle =
       "absolute top-8 w-full max-w-[60%] outline-none text-slate-700 text-left bg-white grid grid-cols-2 border-t border-gray-200 text-center z-10 shadow-xl";
 
-    if (!isPopUpHidden && historyUserName.length == 0 && isHistoryClicked) {
+    if (!isPopUpHidden && historyUserName?.length == 0 && isHistoryClicked) {
       return (
         <div className={popUpStyle} ref={expandedPopUp}>
           <button className="py-2" onClick={historyOnClickHandler}>
@@ -123,7 +123,7 @@ const UserNameInput: React.FC = () => {
       );
     }
 
-    if (!isPopUpHidden && historyUserName.length != 0 && isHistoryClicked) {
+    if (!isPopUpHidden && historyUserName?.length != 0 && isHistoryClicked) {
       return (
         <div className={popUpStyle} ref={expandedPopUp}>
           <button className="py-2" onClick={historyOnClickHandler}>
@@ -140,7 +140,7 @@ const UserNameInput: React.FC = () => {
       );
     }
 
-    if (!isPopUpHidden && favoriteUserName.length == 0 && !isHistoryClicked) {
+    if (!isPopUpHidden && favoriteUserName?.length == 0 && !isHistoryClicked) {
       return (
         <div className={popUpStyle} ref={expandedPopUp}>
           <button
@@ -159,7 +159,7 @@ const UserNameInput: React.FC = () => {
       );
     }
 
-    if (!isPopUpHidden && favoriteUserName.length != 0 && !isHistoryClicked) {
+    if (!isPopUpHidden && favoriteUserName?.length != 0 && !isHistoryClicked) {
       return (
         <div className={popUpStyle} ref={expandedPopUp}>
           <button

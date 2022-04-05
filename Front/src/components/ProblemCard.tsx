@@ -5,6 +5,7 @@ interface IProblemCard {
   item: number;
 }
 
+// eslint-disable-next-line react/prop-types
 const ProblemCard: React.FC<IProblemCard> = ({ item }) => {
   return (
     <div
