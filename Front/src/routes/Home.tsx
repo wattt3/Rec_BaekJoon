@@ -7,6 +7,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../App";
 import { useCombinedStateSelector } from "../redux/hook";
+import { useDispatch } from "react-redux";
+import { setCurrentUserName } from "../redux/slices/userSlice";
 
 interface IHomeSequence {
   id: number;
@@ -38,6 +40,7 @@ const HomeSequence: React.FC<IHomeSequence> = ({ description, id }) => {
 
 const UserNameInput: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isPopUpHidden, setIsPopUpHidden] = useState(true);
   const [isHistoryClicked, setIsHistoryClicked] = useState(true);
   const expandedPopUp = useRef(null);
@@ -69,10 +72,11 @@ const UserNameInput: React.FC = () => {
       return;
     }
     console.log("user name: ", userName);
-    return navigate(routes.PROBLEM_RECOMMEND);
+    dispatch(setCurrentUserName(userName));
+    return navigate(routes.PROBLEM);
   };
 
-  const onClickHandler = () => {
+  const inputOnClickHandler = () => {
     setIsPopUpHidden(false);
   };
 
@@ -80,16 +84,29 @@ const UserNameInput: React.FC = () => {
     (state) => state.userState.historyUserNames
   );
 
-  const historyUserNameButtons = historyUserName?.map((userName, index) => {
-    return <button key={index}>{userName}</button>;
+  const nameButton = (userName: string, index: number) => (
+    <button
+      key={index}
+      onClick={() => {
+        console.log("user name: ", userName);
+        dispatch(setCurrentUserName(userName));
+        return navigate(routes.PROBLEM);
+      }}
+    >
+      {userName}
+    </button>
+  );
+
+  const historyUserNameButtons = historyUserName.map((userName, index) => {
+    return nameButton(userName, index);
   });
 
   const favoriteUserName = useCombinedStateSelector(
     (state) => state.userState.favoriteUserNames
   );
 
-  const favoriteUserNameButtons = favoriteUserName?.map((userName, index) => {
-    return <button key={index}>{userName}</button>;
+  const favoriteUserNameButtons = favoriteUserName.map((userName, index) => {
+    return nameButton(userName, index);
   });
 
   const historyOnClickHandler = () => {
@@ -182,7 +199,7 @@ const UserNameInput: React.FC = () => {
       <input
         id="user-name"
         onKeyDown={onKeyDownHandler}
-        onClick={onClickHandler}
+        onClick={inputOnClickHandler}
         className="w-full max-w-[60%] px-3 py-1 outline-none text-slate-700 text-left"
         placeholder="백준아이디"
         required
