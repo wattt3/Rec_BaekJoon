@@ -325,7 +325,7 @@ const Item: React.FC<{ svg: React.ReactNode; title: string }> = ({
 function NewHome() {
   return (
     <div className="min-h-screen bg-slate-900">
-      <header className="fixed top-0 left-0 w-full text-white flex gap-10 items-center py-5 px-20 rounded-t-3xl z-20">
+      <header className="fixed top-0 left-0 w-full text-white flex gap-10 items-center py-5 px-20  z-[99] bg-slate-900">
         <div className="text-3xl font-bold mr-10 ">
           <span className="text-indigo-500">하루</span>
           <span className="text-white">백준</span>
@@ -358,7 +358,7 @@ function NewHome() {
         </div>
         <aside className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
           <div className="w-full h-[70vh] rounded-3xl backdrop-blur-sm  flex justify-center items-start">
-            <div className="max-w-screen-sm w-full p-10 pt-5 bg-slate-800 rounded-3xl flex flex-col items-center gap-5 ring ring-slate-700 ring-offset-4 ring-offset-slate-900 relative">
+            <div className="max-w-screen-sm w-full p-10 pt-5 bg-slate-800 rounded-3xl flex flex-col items-center gap-5 ring ring-slate-700 ring-offset-4 ring-offset-slate-900">
               <h1 className="text-center text-3xl font-semibold text-white">
                 아이디를 입력해 주세요!
               </h1>

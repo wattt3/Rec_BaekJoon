@@ -97,7 +97,7 @@ const UserNameInput: React.FC = () => {
     </button>
   );
 
-  const historyUserNameButtons = historyUserName.map((userName, index) => {
+  const historyUserNameButtons = historyUserName?.map((userName, index) => {
     return nameButton(userName, index);
   });
 
@@ -105,7 +105,7 @@ const UserNameInput: React.FC = () => {
     (state) => state.userState.favoriteUserNames
   );
 
-  const favoriteUserNameButtons = favoriteUserName.map((userName, index) => {
+  const favoriteUserNameButtons = favoriteUserName?.map((userName, index) => {
     return nameButton(userName, index);
   });
 

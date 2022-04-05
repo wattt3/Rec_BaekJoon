@@ -15,7 +15,7 @@ export enum routes {
 function App() {
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
-      {/* <Header /> */}
+      <Header />
       <Routes>
         <Route path={routes.HOME} element={<Home />}></Route>
         <Route path={routes.NEW_HOME} element={<NewHome />}></Route>
