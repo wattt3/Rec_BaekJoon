@@ -1,8 +1,4 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { routes } from "../App";
-import { useCombinedStateSelector } from "../redux/hook";
 import UserNameInput from "../components/UserNameInput";
 
 const svgDefaultStyle = `h-32 w-32 fill-indigo-500`;
@@ -159,20 +155,14 @@ function Home() {
           <span className="text-indigo-500">하루</span>
           <span className="text-white">백준</span>
         </div>
-        <Link
-          to={routes.PROBLEM_RECOMMEND}
-          className="text-slate-500 hover:text-white cursor-pointer"
-        >
+        <span className="text-slate-500 hover:text-white cursor-pointer">
           문제 추천
-        </Link>
-        <Link
-          to="/history"
-          className="text-slate-500 hover:text-white cursor-pointer"
-        >
+        </span>
+        <span className="text-slate-500 hover:text-white cursor-pointer">
           히스토리
-        </Link>
+        </span>
       </header>
-      <main className="pt-20 w-full h-screen flex flex-col justify-center items-center overflow-hidden relative">
+      <main className="w-full h-screen flex flex-col justify-center items-center overflow-hidden relative">
         <div className="w-full h-[60vh] overflow-hidden">
           <motion.div
             animate={{
@@ -192,8 +182,16 @@ function Home() {
           </motion.div>
         </div>
         <aside className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
-          <div className="w-full h-[70vh] rounded-3xl backdrop-blur-sm  flex justify-center items-start">
-            <div className="max-w-screen-sm w-full p-10 pt-5 bg-slate-800 rounded-3xl flex flex-col items-center gap-5 ring ring-slate-700 ring-offset-4 ring-offset-slate-900">
+          <div className="w-full h-[80vh] flex justify-center items-center px-10">
+            <motion.div
+              initial={{ y: 100, opacity: 0 }}
+              animate={{
+                y: 0,
+                opacity: 1,
+                transition: { duration: 1, delay: 0.5, type: "spring" },
+              }}
+              className="max-w-screen-sm w-full h-full p-10  bg-transparent rounded-3xl flex flex-col items-center gap-5 ring-4 ring-slate-700 ring-offset-4 ring-offset-slate-900 backdrop-blur-sm"
+            >
               <h1 className="text-center text-3xl font-semibold text-white">
                 아이디를 입력해 주세요!
               </h1>
@@ -203,7 +201,7 @@ function Home() {
               >
                 <UserNameInput />
               </form>
-            </div>
+            </motion.div>
           </div>
         </aside>
       </main>
