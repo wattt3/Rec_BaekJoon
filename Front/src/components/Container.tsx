@@ -6,11 +6,7 @@ interface IContainer {
 
 const Container: React.FC<IContainer> = ({ children, customStyle }) => {
   return (
-    <div
-      className={`min-h-screen bg-gradient-to-b from-slate-200 to-slate-400 pt-20 p-5  ${customStyle}`}
-    >
-      {children}
-    </div>
+    <div className={`min-h-screen bg-slate-900 ${customStyle}`}>{children}</div>
   );
 };
 

@@ -1,13 +1,33 @@
+import { AnimatePresence, motion, useAnimation, Variants } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { routes } from "../App";
 import { useCombinedStateSelector } from "../redux/hook";
+
+const PopupAnimation: Variants = {
+  enter: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      type: "tween",
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      type: "tween",
+    },
+  },
+};
 
 const UserNameInput: React.FC = () => {
   const navigate = useNavigate();
   const [isPopUpHidden, setIsPopUpHidden] = useState(true);
   const [isHistoryClicked, setIsHistoryClicked] = useState(true);
   const expandedPopUp = useRef(null);
+  const borderAnimation = useAnimation();
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -69,11 +89,18 @@ const UserNameInput: React.FC = () => {
 
   const renderPopUp = () => {
     const popUpStyle =
-      "absolute top-[100%] w-full outline-none text-slate-700 text-left bg-white grid grid-cols-2 border-t border-gray-200 text-center z-10 shadow-xl rounded-bl-md rounded-br-md ";
+      "absolute top-[100%] w-full outline-none text-slate-700 text-left bg-white grid grid-cols-2 border-t border-gray-200 text-center z-10 shadow-xl rounded-bl-md rounded-br-md";
 
     if (!isPopUpHidden && historyUserName.length == 0 && isHistoryClicked) {
       return (
-        <div className={popUpStyle} ref={expandedPopUp}>
+        <motion.div
+          variants={PopupAnimation}
+          initial="enter"
+          animate="animate"
+          exit={"exit"}
+          className={popUpStyle}
+          ref={expandedPopUp}
+        >
           <button className="py-2" onClick={historyOnClickHandler}>
             최근검색
           </button>
@@ -86,13 +113,20 @@ const UserNameInput: React.FC = () => {
           <div className="text-center py-10 col-span-2 text-gray-400">
             최근에 검색한 이름이 없습니다.
           </div>
-        </div>
+        </motion.div>
       );
     }
 
     if (!isPopUpHidden && historyUserName.length != 0 && isHistoryClicked) {
       return (
-        <div className={popUpStyle} ref={expandedPopUp}>
+        <motion.div
+          variants={PopupAnimation}
+          initial="enter"
+          animate="animate"
+          exit={"exit"}
+          className={popUpStyle}
+          ref={expandedPopUp}
+        >
           <button className="py-2" onClick={historyOnClickHandler}>
             최근검색
           </button>
@@ -103,13 +137,20 @@ const UserNameInput: React.FC = () => {
             즐겨찾기
           </button>
           {historyUserNameButtons}
-        </div>
+        </motion.div>
       );
     }
 
     if (!isPopUpHidden && favoriteUserName.length == 0 && !isHistoryClicked) {
       return (
-        <div className={popUpStyle} ref={expandedPopUp}>
+        <motion.div
+          variants={PopupAnimation}
+          initial="enter"
+          animate="animate"
+          exit={"exit"}
+          className={popUpStyle}
+          ref={expandedPopUp}
+        >
           <button
             className="py-2 bg-gray-200 text-gray-400"
             onClick={historyOnClickHandler}
@@ -122,13 +163,20 @@ const UserNameInput: React.FC = () => {
           <div className="text-center py-10 col-span-2 text-gray-400">
             즐겨찾기 해놓은 이름이 없습니다.
           </div>
-        </div>
+        </motion.div>
       );
     }
 
     if (!isPopUpHidden && favoriteUserName.length != 0 && !isHistoryClicked) {
       return (
-        <div className={popUpStyle} ref={expandedPopUp}>
+        <motion.div
+          variants={PopupAnimation}
+          initial="enter"
+          animate="animate"
+          exit={"exit"}
+          className={popUpStyle}
+          ref={expandedPopUp}
+        >
           <button
             className="py-2 bg-gray-200 text-gray-400"
             onClick={historyOnClickHandler}
@@ -139,23 +187,36 @@ const UserNameInput: React.FC = () => {
             즐겨찾기
           </button>
           {favoriteUserNameButtons}
-        </div>
+        </motion.div>
       );
     }
   };
 
+  useEffect(() => {
+    if (!isPopUpHidden) {
+      borderAnimation.start({
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
+      });
+    } else {
+      borderAnimation.start({
+        borderBottomLeftRadius: "0.375rem",
+        borderBottomRightRadius: "0.375rem",
+      });
+    }
+  }, [isPopUpHidden]);
+
   return (
     <div className="relative w-full flex flex-col items-center">
-      <input
+      <motion.input
+        animate={borderAnimation}
         id="user-name"
         onKeyDown={onKeyDownHandler}
         onClick={onClickHandler}
-        className={`w-full p-3 outline-none ${
-          isPopUpHidden ? "rounded-md" : "rounded-tl-md rounded-tr-md"
-        } text-slate-700 text-left pr-14`}
+        className={`w-full p-3 outline-none rounded-md text-slate-700 text-left pr-14`}
         placeholder="백준아이디"
         required
-      ></input>
+      />
       <button className="absolute right-2 my-auto top-0 bottom-0">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -170,7 +231,9 @@ const UserNameInput: React.FC = () => {
           />
         </svg>
       </button>
-      {renderPopUp()}
+      <AnimatePresence initial={false} exitBeforeEnter>
+        {renderPopUp()}
+      </AnimatePresence>
     </div>
   );
 };
