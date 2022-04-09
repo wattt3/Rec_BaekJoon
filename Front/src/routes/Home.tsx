@@ -100,7 +100,7 @@ function Home() {
           <div className="space-y-5">
             <div
               onClick={handleSequence}
-              className="flex justify-center items-center font-semibold text-7xl w-full cursor-pointer p-5 bg-slate-900 rounded-3xl hover:scale-110 transform transition-transform duration-300"
+              className="flex justify-center items-center font-semibold text-7xl w-full cursor-pointer p-5  rounded-3xl hover:scale-110 transform transition-transform duration-300 "
             >
               <span className="text-indigo-400">하루</span>
               <span className="text-white font-semibold">백준</span>
