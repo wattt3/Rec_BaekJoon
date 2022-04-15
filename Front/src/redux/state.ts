@@ -8,6 +8,9 @@ export interface UserState {
 
   // 유저가 현재 검색한 아이디
   currentUserName: string | undefined;
+
+  // 현재 유저의 추천 문제 리스트
+  recommendProblemsOfCurrentUser: ProblemMetadata[];
 }
 
 // 문제의 정보를 담고 있습니다.

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserState } from "../state";
+import { UserState, ProblemMetadata } from "../state";
 
 interface addUserNameAction {
   userName: string;
@@ -12,6 +12,7 @@ const userSlice = createSlice({
     favoriteUserNames: [],
     historyUserNames: [],
     currentUserName: undefined,
+    recommendProblemsOfCurrentUser: [],
   } as UserState,
   reducers: {
     addUserName: {
@@ -46,8 +47,18 @@ const userSlice = createSlice({
         currentUserName: action.payload,
       };
     },
+    setRecommendProblemMetadatas: (
+      state,
+      action: PayloadAction<ProblemMetadata[]>
+    ) => {
+      return {
+        ...state,
+        recommendProblemsOfCurrentUser: [...action.payload],
+      };
+    },
   },
 });
 
-export const { addUserName, setCurrentUserName } = userSlice.actions;
+export const { addUserName, setCurrentUserName, setRecommendProblemMetadatas } =
+  userSlice.actions;
 export default userSlice.reducer;

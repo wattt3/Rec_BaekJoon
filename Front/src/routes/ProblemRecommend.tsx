@@ -6,12 +6,22 @@ import Container from "../components/Container";
 import PageTitle from "../components/PageTitle";
 import UserNameInput from "../components/UserNameInput";
 import { useCombinedStateSelector } from "../redux/hook";
-import { addUserName } from "../redux/slices/userSlice";
+import {
+  addUserName,
+  setRecommendProblemMetadatas,
+} from "../redux/slices/userSlice";
 
 enum SearchState {
+  // 검색 중
   SEARCHING,
+
+  // 검색 성공
   SUCESS,
+
+  // 존재하지 않는 이름
   FAIL,
+
+  // 그 외의 오류
   UNKNOWN,
 }
 
@@ -38,7 +48,7 @@ function ProblemRecommend() {
       return;
     }
 
-    fetch("/api/user/check", {
+    fetch("/joljack-front/api/user/check", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -60,7 +70,7 @@ function ProblemRecommend() {
           dispatch(addUserName(currentUserName, /* isHistory */ true));
 
           // 여기에 문제를 검색하는 api가 들어와야함.
-          fetch("/api/problem/get", {
+          fetch("joljack-front/api/problem/get", {
             method: "POST",
             credentials: "include",
             headers: {
@@ -77,12 +87,21 @@ function ProblemRecommend() {
                 setSearchState(SearchState.UNKNOWN);
                 return;
               }
-              console.log("problems : ", response.problems);
+              console.log("problems : ", response.problems.length);
+              dispatch(setRecommendProblemMetadatas([...response.problems]));
               setSearchState(SearchState.SUCESS);
+            })
+            .catch((err) => {
+              console.log(err);
+              setSearchState(SearchState.UNKNOWN);
             });
         } else {
           setSearchState(SearchState.FAIL);
         }
+      })
+      .catch((err) => {
+        console.log(err);
+        setSearchState(SearchState.UNKNOWN);
       });
   }, []);
 
