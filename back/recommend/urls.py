@@ -3,11 +3,15 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('user', views.ListUser.as_view()),
-    path('user/<int:pk>/', views.DetailUser.as_view()),
+    path('user', views.user_list),
+    path('user/<int:pk>/', views.user_detail),
 
-    path('problem', views.ListProblem.as_view()),
-    path('problem/<int:pk>/', views.DetailProblem.as_view()),
+    path('user/check/', views.user_check),
+
+    #path('problem', views.problem_list),
+    path('problem/<int:pk>/', views.problem_detail),
+
+    path('problem/get/', views.problem_get),
 
     path('recommend', views.ListRecommend.as_view()),
     path('recommend/<int:pk>/', views.DetailRecommend.as_view()),
