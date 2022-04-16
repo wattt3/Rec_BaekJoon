@@ -20,12 +20,12 @@ from recommend.models import User, Problem, Recommend
 #    obj.save()
 #f.close()
 
-#f = open(r"C:\Users\김성준\Desktop\back\csv\recommend.csv")
-#rdcsv = csv.reader(f)
-#for line in rdcsv:
-#    obj = Recommend(id=line[0], problems={
-#        'problemMetadata': [line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8], line[9], line[10]]
-#        })
-#    obj.save()
-#    print(line[1])
-#f.close()
+f = open(r"C:\Users\김성준\Desktop\back\csv\recommend.csv")
+rdcsv = csv.reader(f)
+for line in rdcsv:
+    obj = Recommend(id=line[0], problems={
+        'problemList': [line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8], line[9], line[10]]
+        })
+    obj.save()
+    print(line[0])
+f.close()

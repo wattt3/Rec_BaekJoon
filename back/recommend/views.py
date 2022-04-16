@@ -1,5 +1,6 @@
+#from importlib.metadata import metadata
+from django.http import JsonResponse
 from django.shortcuts import render
-from numpy import number
 from rest_framework import generics
 
 from rest_framework import status
@@ -8,6 +9,11 @@ from rest_framework.response import Response
 
 from .models import User, Problem, Recommend
 from .serializers import UserSerializer, ProblemSerializer, RecommendSerializer
+
+import urllib.request
+import urllib.parse
+import json
+from collections import OrderedDict
 
 @api_view(['GET', 'POST'])
 def user_list(request):
@@ -46,7 +52,17 @@ def user_detail(request, pk):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+@api_view(['POST'])
+def user_check(request):  
+    if request.method == 'POST':
+        userName = request.data.__getitem__('userName')
 
+        try:
+            a = User.objects.get(name = userName)
+        except User.DoesNotExist:
+            return JsonResponse({'result':False}, status = 200)
+        
+        return JsonResponse({'result':True}, status = 200)
 
 @api_view(['GET', 'POST'])
 def problem_list(request):
@@ -85,6 +101,33 @@ def problem_detail(request, pk):
         problem.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+@api_view(['POST'])
+def problem_get(request):
+
+    if request.method == 'POST':
+        userName = request.data.__getitem__('userName')
+
+        rec = User.objects.get(name = userName)
+        rec = Recommend.objects.get(id = rec.id)
+        serializer = RecommendSerializer(rec)
+
+        metadataList = {'problems':[]}
+        for pid in serializer.data['problems']['problemList']:
+            prob = Problem.objects.get(id=pid)
+
+            url = urllib.request.Request("https://solved.ac/api/v3/problem/show?problemId=" + (str)(prob.number))
+            url.add_header("Content-Type", "application/json")
+            data = urllib.request.urlopen(url)
+            data = data.read()
+            data = json.loads(data.decode('utf-8'))
+            metadata = {"problemId":(str)(data["problemId"]), "title":data["titleKo"], 
+                        "level":(str)(data["level"]), "averageTries":(str)(data["averageTries"]), 
+                        "acceptedUserCount":(str)(data["acceptedUserCount"]), "tags":(str)(data["tags"]), 
+                        "link":'https://www.acmicpc.net/problem/' + (str)(data["problemId"])}
+            metadataList['problems'].append(metadata)
+            
+        return JsonResponse(metadataList, status = 200)
 
 class ListRecommend(generics.ListCreateAPIView):
     queryset = Recommend.objects.all()

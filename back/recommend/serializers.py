@@ -30,7 +30,11 @@ class ProblemSerializer(serializers.ModelSerializer):
         data = urllib.request.urlopen(url)
         data = data.read()
         data = json.loads(data.decode('utf-8'))
-        return data["titleKo"]
+        metadata = {'problemId: ' + (str)(data["problemId"]), 'title: ' + data["titleKo"], 'level: ' + (str)(data["level"]), 
+                    'averageTries: ' + (str)(data["averageTries"]), 'acceptedUserCount: ' + (str)(data["acceptedUserCount"]), 
+                    'tags: ' + (str)(data["tags"]), 'link: ' + 'https://www.acmicpc.net/problem/' + (str)(data["problemId"])}
+
+        return metadata
 
 class RecommendSerializer(serializers.ModelSerializer):
     class Meta:
