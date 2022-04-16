@@ -112,16 +112,24 @@ function ProblemRecommend() {
       });
   }, []);
 
+  // isReady는 현재 로딩이 완료 되었는지 살펴보는 스테이트입니다.
   const [isReady, setIsReady] = useState(false);
+  // isClicked는 로딩이 완료 된 후, 유저가 클릭을 했는지 안했는지 판단하는 스테이트입니다.
   const [isClicked, setIsClicked] = useState(false);
+  // 현재 드래그가 가능한지 아닌지를 판단하는 스테이트입니다.
   const [draggable, setDraggable] = useState(false);
+  // 전체 데이터를 한 페이지당 3개씩 넣어줄 경우에 최대 페이지에 대한 스테이트입니다.
   const [maxIndex, setMaxIndex] = useState(0);
+  // maxIndex에 대한 현재 인덱스 스테이트입니다.
   const [curIndex, setCurIndex] = useState(0);
 
+  // 드래그를 1초에 한번씩 할 수 있게 하는 인터벌 내부에 들어가는 핸들러입니다.
   const handleDragable = useCallback(() => {
     setDraggable((prev) => !prev);
   }, [setDraggable]);
 
+  // 로딩때 로딩이 완료 된 상태에서 화면을 클릭하면 발생하는 이벤트 핸들러입니다.
+  // maxIndex를 여기서 설정해주시면 되고, isClicked 스테이트가 변경 되어야 다음 단계로 넘어갈 수 있습니다.
   const handleClickToBreak = useCallback(() => {
     if (isReady) {
       setMaxIndex(4);
@@ -129,6 +137,7 @@ function ProblemRecommend() {
     }
   }, [isReady]);
 
+  // 휠 이벤트 핸들러입니다.
   const handleWheel = useCallback(
     (e: WheelEvent) => {
       if (draggable) {
@@ -137,16 +146,12 @@ function ProblemRecommend() {
         if (maxIndex) {
           switch (direction) {
             case "UP":
-              if (curIndex > 0) {
-                setCurIndex((prev) => (prev === 0 ? 0 : prev - 1));
-              }
+              setCurIndex((prev) => (prev === 0 ? 0 : prev - 1));
               break;
             case "DOWN":
-              if (curIndex < maxIndex - 1) {
-                setCurIndex((prev) =>
-                  prev === maxIndex - 1 ? maxIndex - 1 : prev + 1
-                );
-              }
+              setCurIndex((prev) =>
+                prev === maxIndex - 1 ? maxIndex - 1 : prev + 1
+              );
               break;
           }
         }
@@ -157,14 +162,17 @@ function ProblemRecommend() {
     [draggable]
   );
 
+  // 해당 코드는 테스트를 위한 코드입니다. 실제 데이터가 들어오면 해당 데이터를 스테이트에 저장하고 isReady 스테이트를 변경해주시면 됩니다.
   useInterval(
     () => {
       setIsReady((prev) => !prev);
     },
     isReady ? null : 1000 * 8
   );
+  // 드래그를 1초에 한번씩만 할 수 있게 하는 코드입니다.
   useInterval(handleDragable, isClicked && !draggable ? 1000 : null);
 
+  // 페이지 전체에 휠 이벤트를 거는 코드입니다.
   useEffect(() => {
     window.addEventListener("wheel", handleWheel, false);
     return () => {
