@@ -12,104 +12,11 @@ import { addUserName } from "../redux/slices/userSlice";
 import { motion, Variants, AnimatePresence, useAnimation } from "framer-motion";
 import MovingGradient from "../components/MovingGradient";
 import { useInterval } from "../libs/useInterval";
-import ProblemCard from "../components/ProblemCard";
+import ProblemCard from "../components/ProblemRecommend/ProblemCard";
+import ProblemCards from "../components/ProblemRecommend/ProblemCards";
+import ProblemAsideProgress from "../components/ProblemRecommend/ProblemAsideProgress";
+import ProblemRecommendLoading from "../components/ProblemRecommend/ProblemRecommendLoading";
 //@ts-ignore
-
-const LoadingContainerAnimation: Variants = {
-  enter: {
-    opacity: 0,
-    y: 100,
-  },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1,
-      delay: 1,
-      delayChildren: 2,
-      staggerChildren: 1,
-    },
-  },
-  exit: {
-    opacity: 0,
-    transition: { duration: 1 },
-  },
-};
-
-const LoadingGradientAnimation: Variants = {
-  enter: {
-    opacity: 0,
-  },
-  animate: {
-    opacity: 1,
-    transition: {
-      duration: 1,
-    },
-  },
-};
-
-const LoadingTextAnimation: Variants = {
-  enter: {
-    opacity: 0,
-  },
-  animate: {
-    opacity: 1,
-    transition: {
-      duration: 1,
-    },
-  },
-};
-
-const ProblemCardStartTime = 1;
-const ProblemCardDuration = 0.5;
-
-const ProblemCardLeftAnimation: Variants = {
-  enter: {
-    opacity: 0,
-    y: 100,
-  },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: ProblemCardStartTime,
-      duration: ProblemCardDuration,
-      type: "tween",
-    },
-  },
-};
-
-const ProblemCardRightTopAnimation: Variants = {
-  enter: {
-    opacity: 0,
-    x: 100,
-  },
-  animate: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      delay: ProblemCardStartTime + ProblemCardDuration * 1,
-      duration: ProblemCardDuration,
-      type: "tween",
-    },
-  },
-};
-
-const ProblemCardRightBottomAnimation: Variants = {
-  enter: {
-    opacity: 0,
-    x: 100,
-  },
-  animate: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      delay: ProblemCardStartTime + ProblemCardDuration * 2,
-      duration: ProblemCardDuration,
-      type: "tween",
-    },
-  },
-};
 
 enum SearchState {
   SEARCHING,
@@ -192,19 +99,19 @@ function ProblemRecommend() {
   const [isReady, setIsReady] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [draggable, setDraggable] = useState(false);
-  const [maxIndex, setMaxIndex] = useState(4);
+  const [maxIndex, setMaxIndex] = useState(0);
   const [curIndex, setCurIndex] = useState(0);
-  const scrollContainerAnimation = useAnimation();
 
   const handleDragable = useCallback(() => {
     setDraggable((prev) => !prev);
   }, [setDraggable]);
 
-  const handleClickToBreak = () => {
+  const handleClickToBreak = useCallback(() => {
     if (isReady) {
+      setMaxIndex(4);
       setIsClicked((prev) => !prev);
     }
-  };
+  }, [isReady]);
 
   const handleWheel = useCallback(
     (e: WheelEvent) => {
@@ -214,12 +121,16 @@ function ProblemRecommend() {
         if (maxIndex) {
           switch (direction) {
             case "UP":
-              setCurIndex((prev) => (prev === 0 ? 0 : prev - 1));
+              if (curIndex > 0) {
+                setCurIndex((prev) => (prev === 0 ? 0 : prev - 1));
+              }
               break;
             case "DOWN":
-              setCurIndex((prev) =>
-                prev === maxIndex - 1 ? maxIndex - 1 : prev + 1
-              );
+              if (curIndex < maxIndex - 1) {
+                setCurIndex((prev) =>
+                  prev === maxIndex - 1 ? maxIndex - 1 : prev + 1
+                );
+              }
               break;
           }
         }
@@ -245,13 +156,6 @@ function ProblemRecommend() {
     };
   }, [handleWheel]);
 
-  useEffect(() => {
-    scrollContainerAnimation.start({
-      translateY: `-${curIndex * 100}vh`,
-      transition: { duration: 1, type: "spring" },
-    });
-  }, [curIndex]);
-
   return (
     <Container>
       <PageTitle title="문제 추천" />
@@ -262,229 +166,24 @@ function ProblemRecommend() {
         <AnimatePresence exitBeforeEnter>
           {isClicked ? (
             <div className="w-full h-screen fixed top-0 left-0" key={"clicked"}>
+              {/* 바둑판 배경 */}
               <ColorExtract delay={0.5} />
               <div className="absolute top-0 left-0 w-full h-screen overflow-hidden">
-                {/* 스크롤 컨테이너 */}
-                <motion.div
-                  animate={scrollContainerAnimation}
-                  style={{ height: `${maxIndex * 100}vh` }}
-                  className="w-full"
-                >
-                  {/* 스크롤 컴포넌트 */}
-                  <div className="w-full h-screen flex justify-center items-center">
-                    <div className="max-w-screen-lg w-full h-[70vh] p-5 px-10 flex gap-10">
-                      {/* 왼쪽 큰 카드 */}
-                      <div className="w-1/2 h-full">
-                        <ProblemCard
-                          index={1}
-                          cardAnimation={ProblemCardLeftAnimation}
-                          cardColor="indigo"
-                          tags={["태그1", "태그2", "태그3", "태그4"]}
-                          title="문제 제목"
-                        />
-                      </div>
-                      {/* 오른쪽 카드 두개 */}
-                      <div className="w-1/2 h-full flex flex-col gap-10">
-                        {/* 오른쪽 카드 위쪽 */}
-                        <ProblemCard
-                          index={2}
-                          cardAnimation={ProblemCardRightTopAnimation}
-                          cardColor="rose"
-                          tags={["태그1", "태그2", "태그3", "태그4"]}
-                          title="문제 제목"
-                        />
-                        {/* 오른쪽 카드 아래쪽 */}
-                        <ProblemCard
-                          index={3}
-                          cardAnimation={ProblemCardRightBottomAnimation}
-                          cardColor="teal"
-                          tags={["태그1", "태그2", "태그3", "태그4"]}
-                          title="문제 제목"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  {/* 스크롤 컴포넌트 */}
-                  <div className="w-full h-screen flex justify-center items-center">
-                    <div className="max-w-screen-lg w-full h-[70vh] p-5 px-10 flex gap-10">
-                      {/* 왼쪽 큰 카드 */}
-                      <div className="w-1/2 h-full">
-                        <ProblemCard
-                          index={4}
-                          cardAnimation={ProblemCardLeftAnimation}
-                          cardColor="indigo"
-                          tags={["태그1", "태그2", "태그3", "태그4"]}
-                          title="문제 제목"
-                        />
-                      </div>
-                      {/* 오른쪽 카드 두개 */}
-                      <div className="w-1/2 h-full flex flex-col gap-10">
-                        {/* 오른쪽 카드 위쪽 */}
-                        <ProblemCard
-                          index={5}
-                          cardAnimation={ProblemCardRightTopAnimation}
-                          cardColor="rose"
-                          tags={["태그1", "태그2", "태그3", "태그4"]}
-                          title="문제 제목"
-                        />
-                        {/* 오른쪽 카드 아래쪽 */}
-                        <ProblemCard
-                          index={6}
-                          cardAnimation={ProblemCardRightBottomAnimation}
-                          cardColor="teal"
-                          tags={["태그1", "태그2", "태그3", "태그4"]}
-                          title="문제 제목"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  {/* 스크롤 컴포넌트 */}
-                  <div className="w-full h-screen flex justify-center items-center">
-                    <div className="max-w-screen-lg w-full h-[70vh] p-5 px-10 flex gap-10">
-                      {/* 왼쪽 큰 카드 */}
-                      <div className="w-1/2 h-full">
-                        <ProblemCard
-                          index={7}
-                          cardAnimation={ProblemCardLeftAnimation}
-                          cardColor="indigo"
-                          tags={["태그1", "태그2", "태그3", "태그4"]}
-                          title="문제 제목"
-                        />
-                      </div>
-                      {/* 오른쪽 카드 두개 */}
-                      <div className="w-1/2 h-full flex flex-col gap-10">
-                        {/* 오른쪽 카드 위쪽 */}
-                        <ProblemCard
-                          index={8}
-                          cardAnimation={ProblemCardRightTopAnimation}
-                          cardColor="rose"
-                          tags={["태그1", "태그2", "태그3", "태그4"]}
-                          title="문제 제목"
-                        />
-                        {/* 오른쪽 카드 아래쪽 */}
-                        <ProblemCard
-                          index={9}
-                          cardAnimation={ProblemCardRightBottomAnimation}
-                          cardColor="teal"
-                          tags={["태그1", "태그2", "태그3", "태그4"]}
-                          title="문제 제목"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  {/* 스크롤 컴포넌트 */}
-                  <div className="w-full h-screen flex justify-center items-center">
-                    <div className="max-w-screen-lg w-full h-[70vh] p-5 px-10 flex gap-10">
-                      {/* 왼쪽 큰 카드 */}
-                      <div className="w-1/2 h-full">
-                        <ProblemCard
-                          index={10}
-                          cardAnimation={ProblemCardLeftAnimation}
-                          cardColor="indigo"
-                          tags={["태그1", "태그2", "태그3", "태그4"]}
-                          title="문제 제목"
-                        />
-                      </div>
-                      {/* 오른쪽 카드 두개 */}
-                      <div className="w-1/2 h-full flex flex-col gap-10">
-                        {/* 오른쪽 카드 위쪽 */}
-                        <ProblemCard
-                          index={11}
-                          cardAnimation={ProblemCardRightTopAnimation}
-                          cardColor="rose"
-                          tags={["태그1", "태그2", "태그3", "태그4"]}
-                          title="문제 제목"
-                        />
-                        {/* 오른쪽 카드 아래쪽 */}
-                        <ProblemCard
-                          index={12}
-                          cardAnimation={ProblemCardRightBottomAnimation}
-                          cardColor="teal"
-                          tags={["태그1", "태그2", "태그3", "태그4"]}
-                          title="문제 제목"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-
-                <motion.aside
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1.5 }}
-                  className="fixed pt-20 top-0 right-0 p-3 h-full flex flex-col justify-around items-center"
-                >
-                  <div className="absolute top-0 left-0 w-full h-full  flex justify-center items-center">
-                    <div className="w-[1px] h-full bg-slate-500 z-0"></div>
-                  </div>
-                  {Array.from(Array(maxIndex).keys()).map((_, i) => (
-                    <motion.div
-                      key={i}
-                      className={`w-3 aspect-square z-10 ${
-                        i === curIndex ? "bg-slate-200" : "bg-slate-500"
-                      }`}
-                    ></motion.div>
-                  ))}
-                </motion.aside>
+                {/* 문제 카드들 한 페이지당 3개씩 넣어둠. */}
+                <ProblemCards
+                  curIndex={curIndex}
+                  maxIndex={maxIndex}
+                  problemData={[]}
+                />
+                {/* 문제 리스트에 옆에 달려있는 페이지 프로그레스 바 */}
+                <ProblemAsideProgress maxIndex={maxIndex} curIndex={curIndex} />
               </div>
             </div>
           ) : (
-            <motion.div
-              onClick={handleClickToBreak}
-              key={"nonClicked"}
-              variants={LoadingContainerAnimation}
-              initial="enter"
-              animate="animate"
-              exit={"exit"}
-              className="w-full max-w-screen-sm h-[70vh] ring-4 ring-offset-4 ring-slate-700 ring-offset-slate-900 bg-transparent rounded-3xl overflow-hidden relative shadow-2xl"
-            >
-              <motion.div
-                variants={LoadingGradientAnimation}
-                className="w-full h-full"
-              >
-                <MovingGradient />
-              </motion.div>
-              <motion.div
-                variants={LoadingTextAnimation}
-                className="absolute top-0 left-0 w-full h-full flex justify-center items-center "
-              >
-                <AnimatePresence exitBeforeEnter>
-                  {isReady ? (
-                    <motion.div
-                      key={"ready"}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 1 }}
-                      className="w-full h-full cursor-pointer flex flex-col gap-5 justify-center items-center p-5"
-                    >
-                      <h1 className="text-5xl text-white font-semibold text-center">
-                        준비가 되었습니다.
-                      </h1>
-                      <span className="text-lg text-white font-semibold">
-                        화면을 클릭해 주세요.
-                      </span>
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key={"loading"}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 1 }}
-                      className="flex flex-col gap-5 justify-center items-center p-5"
-                    >
-                      <h1 className="text-5xl text-white font-semibold text-center">
-                        잠시만 기다려 주세요.
-                      </h1>
-                      <span className="text-lg text-white font-semibold">
-                        xxx님의 정보를 바탕으로 추천할 문제들을 준비하고
-                        있습니다.
-                      </span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            </motion.div>
+            <ProblemRecommendLoading
+              isReady={isReady}
+              handleClickToBreak={handleClickToBreak}
+            />
           )}
         </AnimatePresence>
       </main>
