@@ -73,7 +73,7 @@ export const ProblemCardRightTopAnimation: Variants = {
     opacity: 1,
     x: 0,
     transition: {
-      delay: ProblemCardStartTime + ProblemCardDuration * 1,
+      delay: ProblemCardStartTime + ProblemCardDuration * 0.5,
       duration: ProblemCardDuration,
       type: "tween",
     },
@@ -89,7 +89,7 @@ export const ProblemCardRightBottomAnimation: Variants = {
     opacity: 1,
     x: 0,
     transition: {
-      delay: ProblemCardStartTime + ProblemCardDuration * 2,
+      delay: ProblemCardStartTime + ProblemCardDuration * 1,
       duration: ProblemCardDuration,
       type: "tween",
     },
@@ -121,7 +121,7 @@ export const ProblemCardRightTopAnimationNoDelay: Variants = {
     opacity: 1,
     x: 0,
     transition: {
-      delay: ProblemCardDuration * 1,
+      delay: ProblemCardDuration * 0.5,
       duration: ProblemCardDuration,
       type: "tween",
     },
@@ -137,7 +137,7 @@ export const ProblemCardRightBottomAnimationNoDelay: Variants = {
     opacity: 1,
     x: 0,
     transition: {
-      delay: ProblemCardDuration * 2,
+      delay: ProblemCardDuration * 1,
       duration: ProblemCardDuration,
       type: "tween",
     },
