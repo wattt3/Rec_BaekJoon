@@ -197,7 +197,7 @@ function ProblemRecommend() {
                 <ProblemCards
                   curIndex={curIndex}
                   maxIndex={maxIndex}
-                  problemData={[]}
+                  problemMetaData={[]}
                 />
                 {/* 문제 리스트에 옆에 달려있는 페이지 프로그레스 바 */}
                 <ProblemAsideProgress maxIndex={maxIndex} curIndex={curIndex} />

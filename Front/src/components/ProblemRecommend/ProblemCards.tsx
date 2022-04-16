@@ -13,16 +13,23 @@ import {
 import { useEffect } from "react";
 
 interface IProblemCardContainer {
-  problemData: ProblemMetadata[];
+  problemMetaData: ProblemMetadata[];
   maxIndex: number;
   curIndex: number;
 }
 
 interface IProblemContainer {
   index: number;
+  problemMetaData: ProblemMetadata[];
 }
 
-const ProblemContainer: React.FC<IProblemContainer> = ({ index }) => {
+const ProblemContainer: React.FC<IProblemContainer> = ({
+  index,
+  problemMetaData,
+}) => {
+  const leftProblem = problemMetaData[0];
+  const rightTopProblem = problemMetaData[1];
+  const rightBottomProblem = problemMetaData[2];
   return (
     <div className="w-full h-screen flex justify-center items-center">
       <div className="max-w-screen-lg w-full h-[70vh] p-5 px-10 flex gap-10">
@@ -36,8 +43,12 @@ const ProblemContainer: React.FC<IProblemContainer> = ({ index }) => {
                 : ProblemCardLeftAnimation
             }
             cardColor="indigo"
-            tags={["태그1", "태그2", "태그3", "태그4"]}
-            title="문제 제목"
+            tags={
+              leftProblem
+                ? leftProblem.tags
+                : ["태그1", "태그2", "태그3", "태그4"]
+            }
+            title={leftProblem ? leftProblem.title : "문제 제목"}
           />
         </div>
         {/* 오른쪽 카드 두개 */}
@@ -51,8 +62,12 @@ const ProblemContainer: React.FC<IProblemContainer> = ({ index }) => {
                 : ProblemCardRightTopAnimation
             }
             cardColor="rose"
-            tags={["태그1", "태그2", "태그3", "태그4"]}
-            title="문제 제목"
+            tags={
+              rightTopProblem
+                ? rightTopProblem.tags
+                : ["태그1", "태그2", "태그3", "태그4"]
+            }
+            title={rightTopProblem ? rightTopProblem.title : "문제 제목"}
           />
           {/* 오른쪽 카드 아래쪽 */}
           <ProblemCard
@@ -63,8 +78,12 @@ const ProblemContainer: React.FC<IProblemContainer> = ({ index }) => {
                 : ProblemCardRightBottomAnimation
             }
             cardColor="teal"
-            tags={["태그1", "태그2", "태그3", "태그4"]}
-            title="문제 제목"
+            tags={
+              rightBottomProblem
+                ? rightBottomProblem.tags
+                : ["태그1", "태그2", "태그3", "태그4"]
+            }
+            title={rightBottomProblem ? rightBottomProblem.title : "문제 제목"}
           />
         </div>
       </div>
@@ -73,7 +92,7 @@ const ProblemContainer: React.FC<IProblemContainer> = ({ index }) => {
 };
 
 const ProblemCards: React.FC<IProblemCardContainer> = ({
-  problemData,
+  problemMetaData,
   maxIndex,
   curIndex,
 }) => {
@@ -92,7 +111,11 @@ const ProblemCards: React.FC<IProblemCardContainer> = ({
       className="w-full"
     >
       {Array.from(Array(maxIndex).keys()).map((_, i) => (
-        <ProblemContainer key={i} index={i} />
+        <ProblemContainer
+          problemMetaData={problemMetaData.slice(i, i * 3 + 3)}
+          key={i}
+          index={i}
+        />
       ))}
     </motion.div>
   );
