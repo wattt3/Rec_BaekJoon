@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { GetProblemRequest, GetProblemResponse } from "../api/problem";
 import { checkUserNameRequest, checkUserNameResponse } from "../api/user";
-import ColorExtract from "../components/ColorExtract/index";
+import RippleMosaic from "../components/RippleMosaic/index";
 import Container from "../components/Container";
 import PageTitle from "../components/PageTitle";
 import UserNameInput from "../components/UserNameInput";
@@ -191,7 +191,7 @@ function ProblemRecommend() {
           {isClicked ? (
             <div className="w-full h-screen fixed top-0 left-0" key={"clicked"}>
               {/* 바둑판 배경 */}
-              <ColorExtract delay={0.5} />
+              <RippleMosaic delay={0.5} />
               <div className="absolute top-0 left-0 w-full h-screen overflow-hidden">
                 {/* 문제 카드들 한 페이지당 3개씩 넣어둠. */}
                 <ProblemCards
