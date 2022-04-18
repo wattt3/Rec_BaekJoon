@@ -7,16 +7,9 @@ interface RGB {
 }
 
 const COLORS: RGB[] = [
-  // { r: 15, g: 23, b: 42 }, //slate-900
-  // { r: 30, g: 41, b: 59 }, //slate-800
-  // { r: 51, g: 65, b: 85 }, //slate-700
-  // { r: 203, g: 213, b: 225 }, // slate-300
-  // { r: 100, g: 116, b: 139 }, //slate-500
-  // { r: 71, g: 85, b: 105 }, //slate-600
   { r: 239, g: 68, b: 68 }, // red-500
   { r: 99, g: 102, b: 241 }, // indigo-500
   { r: 20, g: 184, b: 166 }, // teal-500
-  // { r: 249, g: 115, b: 22 }, //orange-500
 ];
 
 class GlowParticle {
