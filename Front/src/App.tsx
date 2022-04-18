@@ -8,6 +8,7 @@ import ProblemRecommend from "./routes/ProblemRecommend";
 export enum routes {
   HOME = "/",
   PROBLEM_RECOMMEND = "/problem-recommend",
+  PROBLEM_DETAIL = "/problems/:id",
   HISTORY = "/history",
 }
 
@@ -19,6 +20,10 @@ function App() {
         <Route path={routes.HOME} element={<Home />}></Route>
         <Route
           path={routes.PROBLEM_RECOMMEND}
+          element={<ProblemRecommend />}
+        ></Route>
+        <Route
+          path={routes.PROBLEM_DETAIL}
           element={<ProblemRecommend />}
         ></Route>
         <Route path={routes.HISTORY} element={<History />}></Route>

@@ -17,6 +17,8 @@ import {
   addUserName,
   setRecommendProblemMetadatas,
 } from "../redux/slices/userSlice";
+import { useMatch } from "react-router-dom";
+import { routes } from "../App";
 
 enum SearchState {
   // 검색 중
@@ -179,6 +181,8 @@ function ProblemRecommend() {
       window.removeEventListener("wheel", handleWheel, false);
     };
   }, [handleWheel]);
+
+  // const isDetailPage = useMatch(routes.PROBLEM_DETAIL);
 
   return (
     <Container>

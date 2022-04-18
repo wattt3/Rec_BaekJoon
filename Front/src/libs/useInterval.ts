@@ -1,14 +1,18 @@
 import { useEffect, useRef } from "react";
 
-export const useInterval = (fn: any, delay: number | null) => {
-  const cb = useRef<any>(null);
+type callback = () => void;
+
+export const useInterval = (fn: callback, delay: number | null) => {
+  const cb = useRef<callback | null>(null);
   useEffect(() => {
     cb.current = fn;
   }, [fn]);
 
   useEffect(() => {
     function tick() {
-      cb.current();
+      if (cb.current) {
+        cb.current();
+      }
     }
     if (delay !== null) {
       const intervalId = setInterval(tick, delay);
