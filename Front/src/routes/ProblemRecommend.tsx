@@ -16,8 +16,9 @@ import {
   addUserName,
   setRecommendProblemMetadatas,
 } from "../redux/slices/userSlice";
-import { useMatch } from "react-router-dom";
+import { useLocation, useMatch } from "react-router-dom";
 import { routes } from "../App";
+import ProblemDetail from "../components/ProblemDetail";
 
 import { SearchState } from "../redux/state";
 
@@ -95,6 +96,10 @@ function ProblemRecommend() {
       });
   }, []);
 
+  const location = useLocation();
+
+  // isReady는 현재 로딩이 완료 되었는지 살펴보는 스테이트입니다.
+  const [isReady, setIsReady] = useState(false);
   // isClicked는 로딩이 완료 된 후, 유저가 클릭을 했는지 안했는지 판단하는 스테이트입니다.
   const [isClicked, setIsClicked] = useState(false);
   // 현재 드래그가 가능한지 아닌지를 판단하는 스테이트입니다.
@@ -154,7 +159,9 @@ function ProblemRecommend() {
     };
   }, [handleWheel]);
 
-  // const isDetailPage = useMatch(routes.PROBLEM_DETAIL);
+  const isDetailPage = useMatch(routes.PROBLEM_DETAIL());
+  const locationState = location.state as any;
+  console.log(locationState?.color, isDetailPage);
 
   return (
     <Container>
@@ -174,6 +181,11 @@ function ProblemRecommend() {
                 />
                 {/* 문제 리스트에 옆에 달려있는 페이지 프로그레스 바 */}
                 <ProblemAsideProgress maxIndex={maxIndex} curIndex={curIndex} />
+                <AnimatePresence>
+                  {locationState?.color && isDetailPage ? (
+                    <ProblemDetail color={locationState.color} />
+                  ) : null}
+                </AnimatePresence>
               </div>
             </div>
           ) : (
