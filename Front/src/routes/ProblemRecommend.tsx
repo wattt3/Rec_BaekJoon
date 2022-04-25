@@ -97,9 +97,6 @@ function ProblemRecommend() {
   }, []);
 
   const location = useLocation();
-
-  // isReady는 현재 로딩이 완료 되었는지 살펴보는 스테이트입니다.
-  const [isReady, setIsReady] = useState(false);
   // isClicked는 로딩이 완료 된 후, 유저가 클릭을 했는지 안했는지 판단하는 스테이트입니다.
   const [isClicked, setIsClicked] = useState(false);
   // 현재 드래그가 가능한지 아닌지를 판단하는 스테이트입니다.
