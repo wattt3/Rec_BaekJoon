@@ -29,6 +29,7 @@ const ProblemContainer: React.FC<IProblemContainer> = ({
         <div className="w-1/2 h-full">
           <ProblemCard
             index={index * 3 + 1}
+            problemId={leftProblem ? leftProblem.problemId : 1}
             cardAnimation={
               index > 0
                 ? ProblemCardLeftAnimationNoDelay
@@ -48,6 +49,7 @@ const ProblemContainer: React.FC<IProblemContainer> = ({
           {/* 오른쪽 카드 위쪽 */}
           <ProblemCard
             index={index * 3 + 2}
+            problemId={rightTopProblem ? rightTopProblem.problemId : 2}
             cardAnimation={
               index > 0
                 ? ProblemCardRightTopAnimationNoDelay
@@ -64,6 +66,7 @@ const ProblemContainer: React.FC<IProblemContainer> = ({
           {/* 오른쪽 카드 아래쪽 */}
           <ProblemCard
             index={index * 3 + 3}
+            problemId={rightBottomProblem ? rightBottomProblem.problemId : 3}
             cardAnimation={
               index > 0
                 ? ProblemCardRightBottomAnimationNoDelay

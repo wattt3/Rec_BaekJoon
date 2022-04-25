@@ -48,11 +48,9 @@ const svgData = [
 const DialogAnimation: Variants = {
   enter: {
     opacity: 0,
-    y: 100,
   },
   animate: {
     opacity: 1,
-    y: 0,
     transition: {
       duration: 1,
       type: "spring",
@@ -60,7 +58,6 @@ const DialogAnimation: Variants = {
   },
   exit: {
     opacity: 0,
-    y: -100,
     transition: {
       duration: 1,
       type: "spring",

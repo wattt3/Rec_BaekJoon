@@ -24,7 +24,7 @@ const ProblemRecommendLoading: React.FC<IProblemRecommendLoading> = ({
       initial="enter"
       animate="animate"
       exit={"exit"}
-      className="w-full max-w-screen-sm h-[70vh] ring-4 ring-offset-4 ring-slate-700 ring-offset-slate-900 bg-transparent rounded-3xl overflow-hidden relative shadow-2xl"
+      className="w-full max-w-lg aspect-square ring-4 ring-offset-4 ring-slate-700 ring-offset-slate-900 bg-transparent rounded-3xl relative shadow-2xl overflow-hidden"
     >
       {/* 로딩 움직이는 그래디언트 */}
       <motion.div variants={LoadingGradientAnimation} className="w-full h-full">
@@ -43,7 +43,7 @@ const ProblemRecommendLoading: React.FC<IProblemRecommendLoading> = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1 }}
-              className="w-full h-full cursor-pointer flex flex-col gap-5 justify-center items-center p-5"
+              className="w-full h-full cursor-pointer flex flex-col gap-5 justify-center items-center"
             >
               <h1 className="text-5xl text-white font-semibold text-center">
                 준비가 되었습니다.
