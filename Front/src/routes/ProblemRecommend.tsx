@@ -16,14 +16,9 @@ import {
   addUserName,
   setRecommendProblemMetadatas,
 } from "../redux/slices/userSlice";
-<<<<<<< HEAD
 import { useLocation, useMatch } from "react-router-dom";
 import { routes } from "../App";
 import ProblemDetail from "../components/ProblemDetail";
-=======
-import { useMatch } from "react-router-dom";
-import { routes } from "../App";
->>>>>>> 문제 디테일 페이지 제작을 위한 라우팅 추가 및 useMatch 추가
 
 import { SearchState } from "../redux/state";
 
@@ -164,13 +159,9 @@ function ProblemRecommend() {
     };
   }, [handleWheel]);
 
-<<<<<<< HEAD
   const isDetailPage = useMatch(routes.PROBLEM_DETAIL());
   const locationState = location.state as any;
   console.log(locationState?.color, isDetailPage);
-=======
-  // const isDetailPage = useMatch(routes.PROBLEM_DETAIL);
->>>>>>> 문제 디테일 페이지 제작을 위한 라우팅 추가 및 useMatch 추가
 
   return (
     <Container>
