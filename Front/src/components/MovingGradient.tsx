@@ -1,9 +1,15 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useRef } from "react";
 
 interface RGB {
   r: number;
   g: number;
   b: number;
+}
+
+interface IMovingGradient {
+  width: number;
+  height: number;
 }
 
 const COLORS: RGB[] = [
@@ -78,11 +84,11 @@ class GlowParticle {
   }
 }
 
-const MovingGradient: React.FC = () => {
+const MovingGradient: React.FC<IMovingGradient> = ({ height, width }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const canvasCtxRef = useRef<CanvasRenderingContext2D | null>(null);
-  const stageWidth = useRef<number | null>(document.body.clientWidth);
-  const stageHeight = useRef<number | null>(document.body.clientHeight);
+  const stageWidth = useRef<number | null>(width);
+  const stageHeight = useRef<number | null>(height);
   const pixelRatio = useRef<number>(window.devicePixelRatio > 1 ? 2 : 1);
   const totalParticles = useRef(15);
   const particles = useRef<GlowParticle[] | null>([]);
@@ -178,7 +184,7 @@ const MovingGradient: React.FC = () => {
   }, [canvasRef]);
 
   return (
-    <canvas ref={canvasRef} className="w-full h-full bg-slate-900"></canvas>
+    <canvas ref={canvasRef} className="w-full h-full bg-transparent"></canvas>
   );
 };
 
