@@ -1,6 +1,7 @@
-FROM node:lts-alpine as build
+FROM node:lts-alpine as builder
 
-WORKDIR '/usr/src/app'
+RUN mkdir /srv/docker-server
+WORKDIR /srv/docker-server
 
 COPY package*.json ./
 RUN npm install
@@ -8,13 +9,13 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-FROM nginx:latest
+FROM nginx:stable-alpine
 
-RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
+RUN rm -rf /etc/nginx/conf.d/default.conf
+COPY --from=builder /srv/docker-server/nginx.conf /etc/nginx/conf.d/default.conf
+
 RUN rm -rf /usr/share/nginx/html/*
-
-COPY --from=build -f /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf:ro
-COPY --from=build -f /usr/src/app/dist /usr/share/nginx/html
+COPY --from=builder /srv/docker-server/build /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
