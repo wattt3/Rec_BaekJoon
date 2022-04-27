@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { motion, AnimatePresence } from "framer-motion";
+import { useRef } from "react";
 import {
   LoadingContainerAnimation,
   LoadingGradientAnimation,
@@ -16,6 +17,7 @@ const ProblemRecommendLoading: React.FC<IProblemRecommendLoading> = ({
   handleClickToBreak,
   isReady,
 }) => {
+  const container = useRef<HTMLDivElement | null>(null);
   return (
     <motion.div
       onClick={handleClickToBreak}
@@ -24,11 +26,18 @@ const ProblemRecommendLoading: React.FC<IProblemRecommendLoading> = ({
       initial="enter"
       animate="animate"
       exit={"exit"}
-      className="w-full max-w-lg aspect-square ring-4 ring-offset-4 ring-slate-700 ring-offset-slate-900 bg-transparent rounded-3xl relative shadow-2xl overflow-hidden"
+      className="w-full max-w-screen-sm aspect-square ring-4 ring-offset-4 ring-slate-700 ring-offset-slate-900 bg-transparent rounded-3xl relative shadow-2xl overflow-hidden"
     >
       {/* 로딩 움직이는 그래디언트 */}
-      <motion.div variants={LoadingGradientAnimation} className="w-full h-full">
-        <MovingGradient />
+      <motion.div
+        ref={container}
+        variants={LoadingGradientAnimation}
+        className="w-full h-full"
+      >
+        <MovingGradient
+          width={container.current?.clientWidth || 0}
+          height={container.current?.clientHeight || 0}
+        />
       </motion.div>
       {/* 그래디언트 위에 올라올 텍스트 컨테이너 */}
       <motion.div
