@@ -5,11 +5,12 @@ import Home from "./routes/Home";
 import History from "./routes/History";
 import ProblemRecommend from "./routes/ProblemRecommend";
 
-export enum routes {
-  HOME = "/",
-  PROBLEM_RECOMMEND = "/problem-recommend",
-  HISTORY = "/history",
-}
+export const routes = {
+  HOME: "/",
+  PROBLEM_RECOMMEND: "/problem-recommend",
+  HISTORY: "/history",
+  PROBLEM_DETAIL: (id?: number) => (id ? `/problems/${id}` : "/problems/:id"),
+};
 
 function App() {
   return (
@@ -19,6 +20,10 @@ function App() {
         <Route path={routes.HOME} element={<Home />}></Route>
         <Route
           path={routes.PROBLEM_RECOMMEND}
+          element={<ProblemRecommend />}
+        ></Route>
+        <Route
+          path={routes.PROBLEM_DETAIL()}
           element={<ProblemRecommend />}
         ></Route>
         <Route path={routes.HISTORY} element={<History />}></Route>

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useRef } from "react";
 
 interface RGB {
@@ -6,17 +7,15 @@ interface RGB {
   b: number;
 }
 
+interface IMovingGradient {
+  width: number;
+  height: number;
+}
+
 const COLORS: RGB[] = [
-  // { r: 15, g: 23, b: 42 }, //slate-900
-  // { r: 30, g: 41, b: 59 }, //slate-800
-  // { r: 51, g: 65, b: 85 }, //slate-700
-  // { r: 203, g: 213, b: 225 }, // slate-300
-  // { r: 100, g: 116, b: 139 }, //slate-500
-  // { r: 71, g: 85, b: 105 }, //slate-600
   { r: 239, g: 68, b: 68 }, // red-500
   { r: 99, g: 102, b: 241 }, // indigo-500
   { r: 20, g: 184, b: 166 }, // teal-500
-  // { r: 249, g: 115, b: 22 }, //orange-500
 ];
 
 class GlowParticle {
@@ -85,11 +84,11 @@ class GlowParticle {
   }
 }
 
-const MovingGradient: React.FC = () => {
+const MovingGradient: React.FC<IMovingGradient> = ({ height, width }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const canvasCtxRef = useRef<CanvasRenderingContext2D | null>(null);
-  const stageWidth = useRef<number | null>(document.body.clientWidth);
-  const stageHeight = useRef<number | null>(document.body.clientHeight);
+  const stageWidth = useRef<number | null>(width);
+  const stageHeight = useRef<number | null>(height);
   const pixelRatio = useRef<number>(window.devicePixelRatio > 1 ? 2 : 1);
   const totalParticles = useRef(15);
   const particles = useRef<GlowParticle[] | null>([]);
@@ -185,7 +184,7 @@ const MovingGradient: React.FC = () => {
   }, [canvasRef]);
 
   return (
-    <canvas ref={canvasRef} className="w-full h-full bg-slate-900"></canvas>
+    <canvas ref={canvasRef} className="w-full h-full bg-transparent"></canvas>
   );
 };
 
