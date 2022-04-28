@@ -1,0 +1,35 @@
+version: '3'
+services:
+
+    frontend:
+        container_name: frontend
+        build: ./Front
+        image: front_image
+        restart: always
+        ports:
+          - "80:80"
+        volumes:
+          - ./back:/srv/docker-server
+          - ./log:/var/log/nginx
+        depends_on:
+          - django
+        networks:
+          - nginx_network
+
+    backend:
+        container_name: backend
+        build: ./back
+        image: backend_image
+        restart: always
+        command: uwsgi --ini uwsgi.ini
+        volumes:
+          - ./back:/srv/docker-server
+          - ./log:/var/log/uwsgi
+        networks:
+          - nginx_network
+        ports:
+          - "8000:8000"
+
+networks:
+    nginx_network:
+        driver: bridge

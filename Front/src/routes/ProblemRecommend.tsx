@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { GetProblemRequest, GetProblemResponse } from "../api/problem";
-import { checkUserNameRequest, checkUserNameResponse } from "../api/user";
+import { CheckUserNameRequest, CheckUserNameResponse } from "../api/user";
 import RippleMosaic from "../components/RippleMosaic/index";
 import Container from "../components/Container";
 import PageTitle from "../components/PageTitle";
@@ -16,7 +16,9 @@ import {
   addUserName,
   setRecommendProblemMetadatas,
 } from "../redux/slices/userSlice";
-
+import { useLocation, useMatch } from "react-router-dom";
+import { routes } from "../App";
+import ProblemDetail from "../components/ProblemDetail";
 import { SearchState } from "../redux/state";
 
 function ProblemRecommend() {
@@ -36,7 +38,7 @@ function ProblemRecommend() {
       return;
     }
 
-    fetch("/joljack-front/api/user/check", {
+    fetch("/api/user/check", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -44,10 +46,10 @@ function ProblemRecommend() {
       },
       body: JSON.stringify({
         userName: currentUserName,
-      } as checkUserNameRequest),
+      } as CheckUserNameRequest),
     })
       .then((response) => response.json())
-      .then((response: checkUserNameResponse) => {
+      .then((response: CheckUserNameResponse) => {
         if (response.err) {
           console.log(response.err);
           setSearchState(SearchState.UNKNOWN);
@@ -58,7 +60,7 @@ function ProblemRecommend() {
           dispatch(addUserName(currentUserName, /* isHistory */ true));
 
           // 여기에 문제를 검색하는 api가 들어와야함.
-          fetch("joljack-front/api/problem/get", {
+          fetch("/api/problem/get", {
             method: "POST",
             credentials: "include",
             headers: {
@@ -93,6 +95,7 @@ function ProblemRecommend() {
       });
   }, []);
 
+  const location = useLocation();
   // isClicked는 로딩이 완료 된 후, 유저가 클릭을 했는지 안했는지 판단하는 스테이트입니다.
   const [isClicked, setIsClicked] = useState(false);
   // 현재 드래그가 가능한지 아닌지를 판단하는 스테이트입니다.
@@ -152,6 +155,13 @@ function ProblemRecommend() {
     };
   }, [handleWheel]);
 
+  const isDetailPage = useMatch(routes.PROBLEM_DETAIL());
+  const locationState = location.state as any;
+  console.log(locationState?.color, isDetailPage);
+  const problemMetadatas = useCombinedStateSelector(
+    (state) => state.userState.recommendProblemsOfCurrentUser
+  );
+
   return (
     <Container>
       <PageTitle title="문제 추천" />
@@ -166,10 +176,15 @@ function ProblemRecommend() {
                 <ProblemCards
                   curIndex={curIndex}
                   maxIndex={maxIndex}
-                  problemMetaData={[]}
+                  problemMetadatas={problemMetadatas}
                 />
                 {/* 문제 리스트에 옆에 달려있는 페이지 프로그레스 바 */}
                 <ProblemAsideProgress maxIndex={maxIndex} curIndex={curIndex} />
+                <AnimatePresence>
+                  {locationState?.color && isDetailPage ? (
+                    <ProblemDetail color={locationState.color} />
+                  ) : null}
+                </AnimatePresence>
               </div>
             </div>
           ) : (
