@@ -1,12 +1,16 @@
 /* eslint-disable react/prop-types */
 import { motion, Variants } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../App";
+import { colorApply, ProblemCardColor } from "../../libs/utils";
 
 interface IProblemCard {
   title: string;
   tags: string[];
   cardAnimation: Variants;
-  cardColor: "rose" | "teal" | "indigo" | "slate";
+  cardColor: ProblemCardColor;
   index: number;
+  problemId: number;
 }
 
 const ProblemCard: React.FC<IProblemCard> = ({
@@ -15,58 +19,60 @@ const ProblemCard: React.FC<IProblemCard> = ({
   cardAnimation,
   cardColor,
   index,
+  problemId,
 }) => {
+  const navigate = useNavigate();
   const isBig = index % 3 === 1;
-  const color =
-    cardColor === "indigo"
-      ? "indigo"
-      : cardColor === "rose"
-      ? "rose"
-      : cardColor === "slate"
-      ? "slate"
-      : "teal";
 
-  return (
+  const showDetail = () => {
+    navigate(routes.PROBLEM_DETAIL(problemId), { state: { color: cardColor } });
+  };
+
+  const bgColor =
+    cardColor === "indigo"
+      ? "bg-indigo-600"
+      : cardColor === "rose"
+      ? "bg-rose-600"
+      : cardColor === "slate"
+      ? "bg-slate-600"
+      : "bg-teal-600";
+
+  const darkerBgColor =
+    cardColor === "indigo"
+      ? "bg-indigo-700"
+      : cardColor === "rose"
+      ? "bg-rose-700"
+      : cardColor === "slate"
+      ? "bg-slate-700"
+      : "bg-teal-700";
+
+  const textColor =
+    cardColor === "indigo"
+      ? "text-indigo-900"
+      : cardColor === "rose"
+      ? "text-rose-900"
+      : cardColor === "slate"
+      ? "text-slate-900"
+      : "text-teal-900";
+
+  return bgColor && darkerBgColor && textColor ? (
     <motion.div
       initial="enter"
       whileInView={"animate"}
       viewport={{ once: true }}
       variants={cardAnimation}
-      className={`w-full h-full flex gap-3 rounded-3xl overflow-hidden ${
-        color === "rose"
-          ? "bg-rose-600"
-          : color === "indigo"
-          ? "bg-indigo-600"
-          : color === "teal"
-          ? "bg-teal-600"
-          : "bg-slate-600"
-      } `}
+      onClick={showDetail}
+      className={`w-full h-full flex relative rounded-3xl overflow-hidden cursor-pointer ${bgColor}`}
     >
-      <div
-        className={`px-3  h-full flex items-end font-semibold ${
+      <motion.div
+        className={`px-3 flex items-end justify-end h-full font-semibold ${
           isBig ? "text-9xl" : "text-8xl"
-        }  ${
-          color === "rose"
-            ? "bg-rose-700"
-            : color === "indigo"
-            ? "bg-indigo-700"
-            : color === "teal"
-            ? "bg-teal-700"
-            : "bg-slate-700"
-        } ${
-          color === "rose"
-            ? "text-rose-900"
-            : color === "indigo"
-            ? "text-indigo-900"
-            : color === "teal"
-            ? "text-teal-900"
-            : "text-slate-900"
-        }`}
+        }  ${darkerBgColor} ${textColor}`}
       >
         {index}
-      </div>
-      <div className="flex-1 h-full relative">
-        <div className="w-full h-full flex flex-col justify-center items-center gap-10 ">
+      </motion.div>
+      <div className="flex-1 h-full">
+        <div className="w-full h-full flex flex-col justify-center items-center gap-10 relative">
           <h1
             className={`${
               isBig ? "text-6xl" : "text-5xl"
@@ -78,15 +84,7 @@ const ProblemCard: React.FC<IProblemCard> = ({
             {tags.map((tag) => (
               <span
                 key={tag}
-                className={`p-1 px-2 text-white shadow-inner rounded-md text-xs font-medium ${
-                  color === "rose"
-                    ? "bg-rose-700"
-                    : color === "indigo"
-                    ? "bg-indigo-700"
-                    : color === "teal"
-                    ? "bg-teal-700"
-                    : "bg-slate-700"
-                }`}
+                className={`p-1 px-2 text-white shadow-inner rounded-md text-xs font-medium ${darkerBgColor}`}
               >
                 {tag}
               </span>
@@ -95,7 +93,7 @@ const ProblemCard: React.FC<IProblemCard> = ({
         </div>
       </div>
     </motion.div>
-  );
+  ) : null;
 };
 
 export default ProblemCard;
