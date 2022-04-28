@@ -155,15 +155,12 @@ function ProblemRecommend() {
     };
   }, [handleWheel]);
 
-<<<<<<< HEAD
   const isDetailPage = useMatch(routes.PROBLEM_DETAIL());
   const locationState = location.state as any;
   console.log(locationState?.color, isDetailPage);
-=======
   const problemMetadatas = useCombinedStateSelector(
     (state) => state.userState.recommendProblemsOfCurrentUser
   );
->>>>>>> Merge 전
 
   return (
     <Container>
