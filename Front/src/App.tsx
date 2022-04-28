@@ -13,6 +13,7 @@ export const routes = {
 };
 
 function App() {
+  console.log(process.env.PUBLIC_URL);
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Header />
