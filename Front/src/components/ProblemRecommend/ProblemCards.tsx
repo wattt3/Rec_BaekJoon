@@ -6,13 +6,13 @@ import { useEffect } from "react";
 import ProblemContainer from "./ProblemContainer";
 
 interface IProblemCardContainer {
-  problemMetaData: ProblemMetadata[];
+  problemMetadatas: ProblemMetadata[];
   maxIndex: number;
   curIndex: number;
 }
 
 const ProblemCards: React.FC<IProblemCardContainer> = ({
-  problemMetaData,
+  problemMetadatas,
   maxIndex,
   curIndex,
 }) => {
@@ -32,7 +32,7 @@ const ProblemCards: React.FC<IProblemCardContainer> = ({
     >
       {Array.from(Array(maxIndex).keys()).map((_, i) => (
         <ProblemContainer
-          problemMetaData={problemMetaData.slice(i, i * 3 + 3)}
+          problemMetaData={problemMetadatas.slice(i, i * 3 + 3)}
           key={i}
           index={i}
         />
