@@ -78,7 +78,6 @@ const SequenceDialog = [
 
 function Home() {
   const [sequence, setSequence] = useState(0);
-
   const Dialog: React.FC<{ description: string[] }> = ({ description }) => {
     const handleSequence = () => {
       setSequence((prev) =>

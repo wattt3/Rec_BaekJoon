@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'recommend',
     'rest_framework',    
-    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -81,10 +80,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'back.wsgi.application'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,"..","Front","build","static")
-]
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -121,7 +116,7 @@ REST_FRAMEWORK = {
     ]
 }
 
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000','http://localhost:8000']
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
