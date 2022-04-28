@@ -107,8 +107,6 @@ const ProblemRecommendLoading: React.FC<IProblemRecommendLoading> = ({
     }
   };
 
-  const container = useRef<HTMLDivElement | null>(null);
-
   return (
     <motion.div
       onClick={handleClickToBreak}
