@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Problem, Recommend
+from .models import User, Problem, Recommend, Text
 
 import urllib.request
 import urllib.parse
@@ -29,3 +29,11 @@ class RecommendSerializer(serializers.ModelSerializer):
             'problems',
         )
         model = Recommend
+
+class TextSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = (
+            'id',
+            'text',
+        )
+        model = Text

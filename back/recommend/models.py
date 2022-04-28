@@ -10,3 +10,5 @@ class Problem(models.Model):
 class Recommend(models.Model):
     problems = models.JSONField()
 
+class Text(models.Model):
+    text = models.TextField()

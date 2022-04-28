@@ -7,8 +7,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import User, Problem, Recommend
-from .serializers import UserSerializer, ProblemSerializer, RecommendSerializer
+from .models import User, Problem, Recommend, Text
+from .serializers import UserSerializer, ProblemSerializer, RecommendSerializer, TextSerializer
 
 import urllib.request
 import urllib.parse
@@ -136,3 +136,11 @@ class ListRecommend(generics.ListCreateAPIView):
 class DetailRecommend(generics.RetrieveUpdateDestroyAPIView):
     queryset = Recommend.objects.all()
     serializer_class = RecommendSerializer
+
+class ListText(generics.ListCreateAPIView):
+    queryset = Text.objects.all()
+    serializer_class = TextSerializer
+
+class DetailText(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Text.objects.all()
+    serializer_class = TextSerializer
