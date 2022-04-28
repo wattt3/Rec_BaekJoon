@@ -1,8 +1,8 @@
-export interface checkUserNameRequest {
+export interface CheckUserNameRequest {
   userName: string;
 }
 
-export interface checkUserNameResponse {
+export interface CheckUserNameResponse {
   result: boolean;
   err?: string;
 }
