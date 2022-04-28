@@ -1,8 +1,10 @@
 import { AnimatePresence, motion, useAnimation, Variants } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../App";
 import { useCombinedStateSelector } from "../redux/hook";
+import { setCurrentUserName } from "../redux/slices/userSlice";
 
 const PopupAnimation: Variants = {
   enter: {
@@ -28,6 +30,8 @@ const UserNameInput: React.FC = () => {
   const [isHistoryClicked, setIsHistoryClicked] = useState(true);
   const expandedPopUp = useRef(null);
   const borderAnimation = useAnimation();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,6 +60,7 @@ const UserNameInput: React.FC = () => {
       return;
     }
     console.log("user name: ", userName);
+    dispatch(setCurrentUserName(userName));
     return navigate(routes.PROBLEM_RECOMMEND);
   };
 

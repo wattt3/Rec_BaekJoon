@@ -2,11 +2,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { GetProblemRequest, GetProblemResponse } from "../api/problem";
-import { checkUserNameRequest, checkUserNameResponse } from "../api/user";
+import { CheckUserNameRequest, CheckUserNameResponse } from "../api/user";
 import RippleMosaic from "../components/RippleMosaic/index";
 import Container from "../components/Container";
 import PageTitle from "../components/PageTitle";
-import UserNameInput from "../components/UserNameInput";
 import { useCombinedStateSelector } from "../redux/hook";
 import { AnimatePresence } from "framer-motion";
 import { useInterval } from "../libs/useInterval";
@@ -20,35 +19,16 @@ import {
 import { useLocation, useMatch } from "react-router-dom";
 import { routes } from "../App";
 import ProblemDetail from "../components/ProblemDetail";
-
-enum SearchState {
-  // 검색 중
-  SEARCHING,
-
-  // 검색 성공
-  SUCESS,
-
-  // 존재하지 않는 이름
-  FAIL,
-
-  // 그 외의 오류
-  UNKNOWN,
-}
+import { SearchState } from "../redux/state";
 
 function ProblemRecommend() {
   const currentUserName = useCombinedStateSelector(
     (state) => state.userState.currentUserName
   );
 
-  const renderInput = () => {
-    if (!currentUserName) {
-      return <UserNameInput />;
-    } else {
-      return null;
-    }
-  };
-
-  const [searchState, setSearchState] = useState(SearchState.SEARCHING);
+  const [searchState, setSearchState] = useState<SearchState>(
+    SearchState.PRESEARCH
+  );
 
   const dispatch = useDispatch();
 
@@ -58,7 +38,7 @@ function ProblemRecommend() {
       return;
     }
 
-    fetch("/joljack-front/api/user/check", {
+    fetch("/api/user/check", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -66,10 +46,10 @@ function ProblemRecommend() {
       },
       body: JSON.stringify({
         userName: currentUserName,
-      } as checkUserNameRequest),
+      } as CheckUserNameRequest),
     })
       .then((response) => response.json())
-      .then((response: checkUserNameResponse) => {
+      .then((response: CheckUserNameResponse) => {
         if (response.err) {
           console.log(response.err);
           setSearchState(SearchState.UNKNOWN);
@@ -80,7 +60,7 @@ function ProblemRecommend() {
           dispatch(addUserName(currentUserName, /* isHistory */ true));
 
           // 여기에 문제를 검색하는 api가 들어와야함.
-          fetch("joljack-front/api/problem/get", {
+          fetch("/api/problem/get", {
             method: "POST",
             credentials: "include",
             headers: {
@@ -99,7 +79,7 @@ function ProblemRecommend() {
               }
               console.log("problems : ", response.problems.length);
               dispatch(setRecommendProblemMetadatas([...response.problems]));
-              setSearchState(SearchState.SUCESS);
+              setSearchState(SearchState.SUCCESS);
             })
             .catch((err) => {
               console.log(err);
@@ -116,9 +96,6 @@ function ProblemRecommend() {
   }, []);
 
   const location = useLocation();
-
-  // isReady는 현재 로딩이 완료 되었는지 살펴보는 스테이트입니다.
-  const [isReady, setIsReady] = useState(false);
   // isClicked는 로딩이 완료 된 후, 유저가 클릭을 했는지 안했는지 판단하는 스테이트입니다.
   const [isClicked, setIsClicked] = useState(false);
   // 현재 드래그가 가능한지 아닌지를 판단하는 스테이트입니다.
@@ -136,11 +113,11 @@ function ProblemRecommend() {
   // 로딩때 로딩이 완료 된 상태에서 화면을 클릭하면 발생하는 이벤트 핸들러입니다.
   // maxIndex를 여기서 설정해주시면 되고, isClicked 스테이트가 변경 되어야 다음 단계로 넘어갈 수 있습니다.
   const handleClickToBreak = useCallback(() => {
-    if (isReady) {
+    if (searchState == SearchState.SUCCESS) {
       setMaxIndex(4);
       setIsClicked((prev) => !prev);
     }
-  }, [isReady]);
+  }, [isClicked]);
 
   // 휠 이벤트 핸들러입니다.
   const handleWheel = useCallback(
@@ -167,13 +144,6 @@ function ProblemRecommend() {
     [draggable]
   );
 
-  // 해당 코드는 테스트를 위한 코드입니다. 실제 데이터가 들어오면 해당 데이터를 스테이트에 저장하고 isReady 스테이트를 변경해주시면 됩니다.
-  useInterval(
-    () => {
-      setIsReady((prev) => !prev);
-    },
-    isReady ? null : 1000 * 8
-  );
   // 드래그를 1초에 한번씩만 할 수 있게 하는 코드입니다.
   useInterval(handleDragable, isClicked && !draggable ? 1000 : null);
 
@@ -188,13 +158,13 @@ function ProblemRecommend() {
   const isDetailPage = useMatch(routes.PROBLEM_DETAIL());
   const locationState = location.state as any;
   console.log(locationState?.color, isDetailPage);
+  const problemMetadatas = useCombinedStateSelector(
+    (state) => state.userState.recommendProblemsOfCurrentUser
+  );
 
   return (
     <Container>
       <PageTitle title="문제 추천" />
-      {/* <main className="mx-auto max-w-screen-lg w-full min-h-screen">
-        {renderInput()}
-      </main> */}
       <main className="w-full min-h-screen flex justify-center items-center">
         <AnimatePresence exitBeforeEnter>
           {isClicked ? (
@@ -206,7 +176,7 @@ function ProblemRecommend() {
                 <ProblemCards
                   curIndex={curIndex}
                   maxIndex={maxIndex}
-                  problemMetaData={[]}
+                  problemMetadatas={problemMetadatas}
                 />
                 {/* 문제 리스트에 옆에 달려있는 페이지 프로그레스 바 */}
                 <ProblemAsideProgress maxIndex={maxIndex} curIndex={curIndex} />
@@ -219,7 +189,7 @@ function ProblemRecommend() {
             </div>
           ) : (
             <ProblemRecommendLoading
-              isReady={isReady}
+              searchState={searchState}
               handleClickToBreak={handleClickToBreak}
             />
           )}

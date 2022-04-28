@@ -37,6 +37,27 @@ export interface ProblemMetadata {
   link: string;
 }
 
+export enum SearchState {
+  // 검색 전
+  PRESEARCH,
+
+  // 검색 중
+  SEARCHING,
+
+  // 검색 성공
+  SUCCESS,
+
+  // 존재하지 않는 이름
+  FAIL,
+
+  // 그 외의 오류
+  UNKNOWN,
+}
+
+export interface ProblemRecommendState {
+  searchState: SearchState;
+}
+
 // 문제 추천 페이지 필요한 기능
 // 추천 받는 유저에 대한 정보
 //  추천 결과에 따른 문제 카드들
