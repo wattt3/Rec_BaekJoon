@@ -38,7 +38,7 @@ function ProblemRecommend() {
       return;
     }
 
-    fetch("/api/user/check", {
+    fetch("/api/user/check/", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -60,7 +60,7 @@ function ProblemRecommend() {
           dispatch(addUserName(currentUserName, /* isHistory */ true));
 
           // 여기에 문제를 검색하는 api가 들어와야함.
-          fetch("/api/problem/get", {
+          fetch("/api/problem/get/", {
             method: "POST",
             credentials: "include",
             headers: {

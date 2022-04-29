@@ -10,6 +10,7 @@ services:
           - "80:80"
         volumes:
           - ./back:/srv/docker-server
+          - ./Front:/srv/docker-server
           - ./log:/var/log/nginx
         depends_on:
           - django
