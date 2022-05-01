@@ -53,7 +53,7 @@ def user_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['POST'])
-def user_check(request):  
+def user_check(request):
     if request.method == 'POST':
         userName = request.data.__getitem__('userName')
 
@@ -61,7 +61,7 @@ def user_check(request):
             a = User.objects.get(name = userName)
         except User.DoesNotExist:
             return JsonResponse({'result':False}, status = 200)
-        
+
         return JsonResponse({'result':True}, status = 200)
 
 @api_view(['GET', 'POST'])
@@ -121,12 +121,12 @@ def problem_get(request):
             data = urllib.request.urlopen(url)
             data = data.read()
             data = json.loads(data.decode('utf-8'))
-            metadata = {"problemId":(str)(data["problemId"]), "title":data["titleKo"], 
-                        "level":(str)(data["level"]), "averageTries":(str)(data["averageTries"]), 
-                        "acceptedUserCount":(str)(data["acceptedUserCount"]), "tags":(str)(data["tags"]), 
+            metadata = {"problemId":(str)(data["problemId"]), "title":data["titleKo"],
+                        "level":(str)(data["level"]), "averageTries":(str)(data["averageTries"]),
+                        "acceptedUserCount":(str)(data["acceptedUserCount"]), "tags":data["tags"],
                         "link":'https://www.acmicpc.net/problem/' + (str)(data["problemId"])}
             metadataList['problems'].append(metadata)
-            
+
         return JsonResponse(metadataList, status = 200)
 
 class ListRecommend(generics.ListCreateAPIView):

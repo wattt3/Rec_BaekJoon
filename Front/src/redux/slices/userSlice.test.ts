@@ -1,4 +1,4 @@
-import { UserState, ProblemMetadata } from "../state";
+import { UserState, ProblemMetadata, Tag, TagDisplayName } from "../state";
 import reducer, {
   addUserName,
   setCurrentUserName,
@@ -86,7 +86,7 @@ test("Set current users's recommend problems.", () => {
           level: 2,
           averageTries: 12,
           acceptedUserCount: 1201,
-          tags: ["implementation", "math"],
+          tags: [],
           link: "어떤 백준 링크",
         } as ProblemMetadata,
       ])
@@ -102,7 +102,7 @@ test("Set current users's recommend problems.", () => {
         level: 2,
         averageTries: 12,
         acceptedUserCount: 1201,
-        tags: ["implementation", "math"],
+        tags: [],
         link: "어떤 백준 링크",
       } as ProblemMetadata,
     ],

@@ -5,9 +5,10 @@ const problemRecommendSlice = createSlice({
   name: "RECOMMEND",
   initialState: {
     searchState: SearchState.PRESEARCH,
+    maxProblemNumPerPage: 3,
   } as ProblemRecommendState,
   reducers: {
-    setSearchingState: (state, action: PayloadAction<SearchState>) => {
+    setSearchState: (state, action: PayloadAction<SearchState>) => {
       return {
         ...state,
         searchState: action.payload,
@@ -16,5 +17,5 @@ const problemRecommendSlice = createSlice({
   },
 });
 
-export const { setSearchingState } = problemRecommendSlice.actions;
+export const { setSearchState } = problemRecommendSlice.actions;
 export default problemRecommendSlice.reducer;

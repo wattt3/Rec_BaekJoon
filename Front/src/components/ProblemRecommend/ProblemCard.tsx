@@ -3,29 +3,28 @@ import { motion, Variants } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../App";
 import { colorApply, ProblemCardColor } from "../../libs/utils";
+import { ProblemMetadata } from "../../redux/state";
 
 interface IProblemCard {
-  title: string;
-  tags: string[];
+  problemMetadata: ProblemMetadata;
   cardAnimation: Variants;
   cardColor: ProblemCardColor;
   index: number;
-  problemId: number;
 }
 
 const ProblemCard: React.FC<IProblemCard> = ({
-  title,
-  tags,
+  problemMetadata,
   cardAnimation,
   cardColor,
   index,
-  problemId,
 }) => {
   const navigate = useNavigate();
   const isBig = index % 3 === 1;
 
   const showDetail = () => {
-    navigate(routes.PROBLEM_DETAIL(problemId), { state: { color: cardColor } });
+    navigate(routes.PROBLEM_DETAIL(problemMetadata.problemId), {
+      state: { color: cardColor },
+    });
   };
 
   const bgColor =
@@ -78,15 +77,15 @@ const ProblemCard: React.FC<IProblemCard> = ({
               isBig ? "text-6xl" : "text-5xl"
             } font-semibold text-white`}
           >
-            {title}
+            {problemMetadata.title}
           </h1>
           <div className="absolute bottom-0 left-0 w-full flex justify-center items-center gap-2 flex-wrap p-3">
-            {tags.map((tag) => (
+            {problemMetadata.tags.map((tag, index) => (
               <span
-                key={tag}
+                key={index}
                 className={`p-1 px-2 text-white shadow-inner rounded-md text-xs font-medium ${darkerBgColor}`}
               >
-                {tag}
+                {tag.displayNames[0].name}
               </span>
             ))}
           </div>
