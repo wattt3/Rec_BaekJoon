@@ -1,8 +1,10 @@
-/* eslint-disable react/prop-types */
+import React from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { routes } from "../App";
 import { colorApply, ProblemCardColor } from "../libs/utils";
+import { useCombinedStateSelector } from "../redux/hook";
+import { ProblemMetadata } from "../redux/state";
 
 interface IProblemDetail {
   color: ProblemCardColor;
@@ -10,6 +12,20 @@ interface IProblemDetail {
 
 const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
   const navigate = useNavigate();
+
+  const { problemId } = useParams<{ problemId?: string }>();
+  console.log(problemId);
+  if (problemId == undefined) {
+    return <div>No matched problemId.</div>;
+  }
+
+  const ProblemMetadataList = useCombinedStateSelector(
+    (state) => state.userState.recommendProblemsOfCurrentUser
+  );
+
+  const currentProblemMetadata = ProblemMetadataList.find(
+    (problemMetadata) => problemMetadata.problemId == parseInt(problemId!)
+  )!;
 
   const bgColor =
     color === "indigo"
@@ -37,6 +53,18 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
       : color === "slate"
       ? "bg-slate-500"
       : "bg-teal-500";
+
+  // dispalyNames의 0번째가 한글 이름
+  const tagItemList = currentProblemMetadata.tags
+    .map((tag) => tag.displayNames[0].name)
+    .map((tagName, index) => (
+      <span
+        className={`px-2 py-1 ${darkerBgColor}  rounded-full text-white font-medium`}
+        key={index}
+      >
+        {tagName}
+      </span>
+    ));
 
   return (
     <motion.section
@@ -70,59 +98,32 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
           className={`w-full h-full ${bgColor} rounded-tl-3xl rounded-tr-3xl p-10`}
         >
           <div className="w-full h-full flex flex-col gap-5 items-start">
-            <div className="text-5xl font-semibold text-white">제목</div>
+            <div className="text-5xl font-semibold text-white">
+              {currentProblemMetadata.title}
+            </div>
             <div className="flex flex-wrap w-full justify-start items-center gap-3 ">
-              <span
-                className={`px-2 py-1 ${darkerBgColor}  rounded-full text-white font-medium`}
-              >
-                태그
-              </span>
-              <span
-                className={`px-2 py-1 ${darkerBgColor}  rounded-full text-white font-medium`}
-              >
-                태그
-              </span>
-              <span
-                className={`px-2 py-1 ${darkerBgColor}  rounded-full text-white font-medium`}
-              >
-                태그
-              </span>
-              <span
-                className={`px-2 py-1 ${darkerBgColor}  rounded-full text-white font-medium`}
-              >
-                태그
-              </span>
-              <span
-                className={`px-2 py-1 ${darkerBgColor}  rounded-full text-white font-medium`}
-              >
-                태그
-              </span>
-              <span
-                className={`px-2 py-1 ${darkerBgColor}  rounded-full text-white font-medium`}
-              >
-                태그
-              </span>
+              {tagItemList}
             </div>
             <div className="w-full flex flex-wrap justify-start items-center gap-5">
               <div
                 className={`w-72 aspect-square ${lighterBgColor} rounded-3xl flex justify-center items-center  text-2xl font-semibold`}
               >
-                레벨
+                {currentProblemMetadata.level}
               </div>
               <div
                 className={`w-72 aspect-square ${lighterBgColor} rounded-3xl flex justify-center items-center`}
               >
-                평균 시도 횟수
+                {currentProblemMetadata.averageTries}
               </div>
               <div
                 className={`w-72 aspect-square ${lighterBgColor} rounded-3xl flex justify-center items-center`}
               >
-                맞은 사람 수
+                {currentProblemMetadata.acceptedUserCount}
               </div>
               <div
                 className={`w-72 aspect-square ${lighterBgColor} rounded-3xl flex justify-center items-center`}
               >
-                링크
+                {currentProblemMetadata.link}
               </div>
             </div>
           </div>

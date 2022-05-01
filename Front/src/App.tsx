@@ -9,7 +9,8 @@ export const routes = {
   HOME: "/",
   PROBLEM_RECOMMEND: "/problem-recommend",
   HISTORY: "/history",
-  PROBLEM_DETAIL: (id?: number) => (id ? `/problems/${id}` : "/problems/:id"),
+  PROBLEM_DETAIL: (problemId?: number) =>
+    problemId ? `/problems/${problemId}` : "/problems/:problemId",
 };
 
 function App() {
