@@ -19,7 +19,7 @@ import {
 import { useLocation, useMatch } from "react-router-dom";
 import { routes } from "../App";
 import ProblemDetail from "../components/ProblemDetail";
-import { SearchState } from "../redux/state";
+import { ProblemMetadata, SearchState } from "../redux/state";
 
 function ProblemRecommend() {
   const currentUserName = useCombinedStateSelector(
@@ -97,11 +97,11 @@ function ProblemRecommend() {
 
   const location = useLocation();
   // isClicked는 로딩이 완료 된 후, 유저가 클릭을 했는지 안했는지 판단하는 스테이트입니다.
-  const [isClicked, setIsClicked] = useState(false);
+  const [isClicked, setIsClicked] = useState(true);
   // 현재 드래그가 가능한지 아닌지를 판단하는 스테이트입니다.
   const [draggable, setDraggable] = useState(false);
   // 전체 데이터를 한 페이지당 3개씩 넣어줄 경우에 최대 페이지에 대한 스테이트입니다.
-  const [maxIndex, setMaxIndex] = useState(0);
+  const [maxIndex, setMaxIndex] = useState(4);
   // maxIndex에 대한 현재 인덱스 스테이트입니다.
   const [curIndex, setCurIndex] = useState(0);
 
@@ -114,7 +114,8 @@ function ProblemRecommend() {
   // maxIndex를 여기서 설정해주시면 되고, isClicked 스테이트가 변경 되어야 다음 단계로 넘어갈 수 있습니다.
   const handleClickToBreak = useCallback(() => {
     if (searchState == SearchState.SUCCESS) {
-      setMaxIndex(4);
+      const maxIndex = Math.ceil(problemMetadatas.length / 3);
+      setMaxIndex(maxIndex);
       setIsClicked((prev) => !prev);
     }
   }, [isClicked]);
@@ -161,30 +162,144 @@ function ProblemRecommend() {
     (state) => state.userState.recommendProblemsOfCurrentUser
   );
 
+  // // mocking data
+  // const problemMetadatas: ProblemMetadata[] = [
+  //   {
+  //     title: "문제 제목",
+  //     tags: ["태그1", "태그2", "태그3", "태그4"],
+  //     acceptedUserCount: 10,
+  //     averageTries: 10,
+  //     level: 10,
+  //     link: "https://google.com",
+  //     problemId: Date.now() + Math.round(Math.random() * 10000),
+  //   },
+  //   {
+  //     title: "문제 제목",
+  //     tags: ["태그1", "태그2", "태그3", "태그4"],
+  //     acceptedUserCount: 10,
+  //     averageTries: 10,
+  //     level: 10,
+  //     link: "https://google.com",
+  //     problemId: Date.now() + Math.round(Math.random() * 10000),
+  //   },
+  //   {
+  //     title: "문제 제목",
+  //     tags: ["태그1", "태그2", "태그3", "태그4"],
+  //     acceptedUserCount: 10,
+  //     averageTries: 10,
+  //     level: 10,
+  //     link: "https://google.com",
+  //     problemId: Date.now() + Math.round(Math.random() * 10000),
+  //   },
+  //   {
+  //     title: "문제 제목",
+  //     tags: ["태그1", "태그2", "태그3", "태그4"],
+  //     acceptedUserCount: 10,
+  //     averageTries: 10,
+  //     level: 10,
+  //     link: "https://google.com",
+  //     problemId: Date.now() + Math.round(Math.random() * 10000),
+  //   },
+  //   {
+  //     title: "문제 제목",
+  //     tags: ["태그1", "태그2", "태그3", "태그4"],
+  //     acceptedUserCount: 10,
+  //     averageTries: 10,
+  //     level: 10,
+  //     link: "https://google.com",
+  //     problemId: Date.now() + Math.round(Math.random() * 10000),
+  //   },
+  //   {
+  //     title: "문제 제목",
+  //     tags: ["태그1", "태그2", "태그3", "태그4"],
+  //     acceptedUserCount: 10,
+  //     averageTries: 10,
+  //     level: 10,
+  //     link: "https://google.com",
+  //     problemId: Date.now() + Math.round(Math.random() * 10000),
+  //   },
+  //   {
+  //     title: "문제 제목",
+  //     tags: ["태그1", "태그2", "태그3", "태그4"],
+  //     acceptedUserCount: 10,
+  //     averageTries: 10,
+  //     level: 10,
+  //     link: "https://google.com",
+  //     problemId: Date.now() + Math.round(Math.random() * 10000),
+  //   },
+  //   {
+  //     title: "문제 제목",
+  //     tags: ["태그1", "태그2", "태그3", "태그4"],
+  //     acceptedUserCount: 10,
+  //     averageTries: 10,
+  //     level: 10,
+  //     link: "https://google.com",
+  //     problemId: Date.now() + Math.round(Math.random() * 10000),
+  //   },
+  //   {
+  //     title: "문제 제목",
+  //     tags: ["태그1", "태그2", "태그3", "태그4"],
+  //     acceptedUserCount: 10,
+  //     averageTries: 10,
+  //     level: 10,
+  //     link: "https://google.com",
+  //     problemId: Date.now() + Math.round(Math.random() * 10000),
+  //   },
+  //   {
+  //     title: "문제 제목",
+  //     tags: ["태그1", "태그2", "태그3", "태그4"],
+  //     acceptedUserCount: 10,
+  //     averageTries: 10,
+  //     level: 10,
+  //     link: "https://google.com",
+  //     problemId: Date.now() + Math.round(Math.random() * 10000),
+  //   },
+  //   {
+  //     title: "문제 제목",
+  //     tags: ["태그1", "태그2", "태그3", "태그4"],
+  //     acceptedUserCount: 10,
+  //     averageTries: 10,
+  //     level: 10,
+  //     link: "https://google.com",
+  //     problemId: Date.now() + Math.round(Math.random() * 10000),
+  //   },
+  //   {
+  //     title: "문제 제목",
+  //     tags: ["태그1", "태그2", "태그3", "태그4"],
+  //     acceptedUserCount: 10,
+  //     averageTries: 10,
+  //     level: 10,
+  //     link: "https://google.com",
+  //     problemId: Date.now() + Math.round(Math.random() * 10000),
+  //   },
+  // ];
+
   return (
     <Container>
       <PageTitle title="문제 추천" />
       <main className="w-full min-h-screen flex justify-center items-center">
         <AnimatePresence exitBeforeEnter>
           {isClicked ? (
-            <div className="w-full h-screen fixed top-0 left-0" key={"clicked"}>
-              {/* 바둑판 배경 */}
-              <RippleMosaic delay={0.5} />
-              <div className="absolute top-0 left-0 w-full h-screen overflow-hidden">
-                {/* 문제 카드들 한 페이지당 3개씩 넣어둠. */}
-                <ProblemCards
-                  curIndex={curIndex}
-                  maxIndex={maxIndex}
-                  problemMetadatas={problemMetadatas}
-                />
-                {/* 문제 리스트에 옆에 달려있는 페이지 프로그레스 바 */}
-                <ProblemAsideProgress maxIndex={maxIndex} curIndex={curIndex} />
-                <AnimatePresence>
-                  {locationState?.color && isDetailPage ? (
-                    <ProblemDetail color={locationState.color} />
-                  ) : null}
-                </AnimatePresence>
+            <div
+              key={"clicked"}
+              className="w-full h-screen overflow-hidden relative"
+            >
+              <div className="absolute top-0 left-0 w-full h-full">
+                <RippleMosaic delay={0.5} />
               </div>
+              {/* 문제 카드들 한 페이지당 3개씩 넣어둠. */}
+              <ProblemCards
+                curIndex={curIndex}
+                maxIndex={maxIndex}
+                problemMetadatas={problemMetadatas}
+              />
+              {/* 문제 리스트에 옆에 달려있는 페이지 프로그레스 바 */}
+              <ProblemAsideProgress maxIndex={maxIndex} curIndex={curIndex} />
+              <AnimatePresence>
+                {locationState?.color && isDetailPage ? (
+                  <ProblemDetail color={locationState.color} />
+                ) : null}
+              </AnimatePresence>
             </div>
           ) : (
             <ProblemRecommendLoading
