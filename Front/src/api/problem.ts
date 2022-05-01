@@ -1,4 +1,4 @@
-import { ProblemMetadata } from "../redux/state";
+import { ProblemMetadata, Tag } from "../redux/state";
 
 export interface GetProblemRequest {
   userName: string;

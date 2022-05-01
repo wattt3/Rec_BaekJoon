@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   LoadingContainerAnimation,
@@ -9,20 +10,20 @@ import {
 } from "../../animations/problemRecommend";
 import { routes } from "../../App";
 import { useCombinedStateSelector } from "../../redux/hook";
+import { setSearchState } from "../../redux/slices/problemRecommendSlice";
 import { SearchState } from "../../redux/state";
 import MovingGradient from "../MovingGradient";
 import UserNameInput from "../UserNameInput";
 
 interface IProblemRecommendLoading {
-  handleClickToBreak: () => void;
   searchState: SearchState;
 }
 
 const ProblemRecommendLoading: React.FC<IProblemRecommendLoading> = ({
-  handleClickToBreak,
   searchState,
 }) => {
   const container = useRef<HTMLDivElement | null>(null);
+  const dispatch = useDispatch();
   const currentUserName = useCombinedStateSelector(
     (state) => state.userState.currentUserName
   );
@@ -109,7 +110,11 @@ const ProblemRecommendLoading: React.FC<IProblemRecommendLoading> = ({
 
   return (
     <motion.div
-      onClick={handleClickToBreak}
+      onClick={() => {
+        if (searchState == SearchState.SUCCESS) {
+          dispatch(setSearchState(SearchState.SHOW));
+        }
+      }}
       key={"nonClicked"}
       variants={LoadingContainerAnimation}
       initial="enter"

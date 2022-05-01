@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
 import NotFound from "./routes/404";
 import Home from "./routes/Home";
 import History from "./routes/History";
@@ -9,11 +8,11 @@ export const routes = {
   HOME: "/",
   PROBLEM_RECOMMEND: "/problem-recommend",
   HISTORY: "/history",
-  PROBLEM_DETAIL: (id?: number) => (id ? `/problems/${id}` : "/problems/:id"),
+  PROBLEM_DETAIL: (problemId?: number) =>
+    problemId ? `/problems/${problemId}` : "/problems/:problemId",
 };
 
 function App() {
-  console.log(process.env.PUBLIC_URL);
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       {/* <Header /> */}

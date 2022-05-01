@@ -13,6 +13,32 @@ export interface UserState {
   recommendProblemsOfCurrentUser: ProblemMetadata[];
 }
 
+export interface TagDisplayName {
+  language: string;
+
+  name: string;
+
+  short: string;
+}
+
+export interface Aliases {
+  aliases: string;
+}
+
+export interface Tag {
+  key: string;
+
+  isMeta: boolean;
+
+  bojTagId: number;
+
+  problemCount: number;
+
+  displayNames: TagDisplayName[];
+
+  aliases?: Aliases[];
+}
+
 // 문제의 정보를 담고 있습니다.
 export interface ProblemMetadata {
   // 문제의 id
@@ -30,8 +56,8 @@ export interface ProblemMetadata {
   // 문제 맞은 사람 수
   acceptedUserCount: number;
 
-  // 문제의 태그들 (solved.ac 에서는 tags.key)
-  tags: string[];
+  // 문제의 태그들
+  tags: Tag[];
 
   // 백준으로 넘어갈 수 있는 링크
   link: string;
@@ -52,10 +78,16 @@ export enum SearchState {
 
   // 그 외의 오류
   UNKNOWN,
+
+  // 문제 보여주는 상태
+  SHOW,
 }
 
 export interface ProblemRecommendState {
   searchState: SearchState;
+
+  // 전체 데이터를 한 페이지당 3개씩 넣어줄 경우에 최대 페이지에 대한 스테이트입니다.
+  maxProblemNumPerPage: number;
 }
 
 // 문제 추천 페이지 필요한 기능

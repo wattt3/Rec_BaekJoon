@@ -9,6 +9,9 @@ import {
   ProblemDetailContainerAnimation,
   ProblemDetailItemAnimation,
 } from "../animations/problemDetail";
+import React from "react";
+import { useCombinedStateSelector } from "../redux/hook";
+import { ProblemMetadata } from "../redux/state";
 
 interface IProblemDetail {
   color: ProblemCardColor;
@@ -18,6 +21,20 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
   const navigate = useNavigate();
   // problemId를 파악해서 문제에 대한 구체적인 데이터를 가져오면 됨.
   // const { id: problemId } = useParams();
+
+  const { problemId } = useParams<{ problemId?: string }>();
+  console.log(problemId);
+  if (problemId == undefined) {
+    return <div>No matched problemId.</div>;
+  }
+
+  const ProblemMetadataList = useCombinedStateSelector(
+    (state) => state.userState.recommendProblemsOfCurrentUser
+  );
+
+  const currentProblemMetadata = ProblemMetadataList.find(
+    (problemMetadata) => problemMetadata.problemId == parseInt(problemId!)
+  )!;
 
   const bgColor =
     color === "indigo"
@@ -55,6 +72,18 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
       ? "ring-slate-500"
       : "ring-teal-500";
 
+  // dispalyNames의 0번째가 한글 이름
+  const tagItemList = currentProblemMetadata.tags
+    .map((tag) => tag.displayNames[0].name)
+    .map((tagName, index) => (
+      <span
+        className={`px-2 py-1 ${darkerBgColor}  rounded-full text-white font-medium`}
+        key={index}
+      >
+        {tagName}
+      </span>
+    ));
+
   return (
     <motion.section
       initial={{ opacity: 0, y: document.body.clientHeight }}
@@ -89,16 +118,19 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
           className={`w-full h-full ${bgColor} rounded-tl-3xl rounded-tr-3xl p-10`}
         >
           <div className="w-full h-full flex flex-col gap-5 items-start">
-            <div className="text-5xl font-semibold text-white">제목</div>
+            <div className="text-5xl font-semibold text-white">
+              {currentProblemMetadata.title}
+            </div>
             <div className="flex flex-wrap w-full justify-start items-center gap-3">
-              {Array.from(Array(5).keys()).map((_, i) => (
-                <span
-                  key={i}
-                  className={`${darkerBgColor} text-white font-medium text-sm p-1 px-3 rounded-full`}
-                >
-                  태그
-                </span>
-              ))}
+              {/* {Array.from(Array(5).keys()).map((_, i) =>
+                // <span
+                //   key={i}
+                //   className={`${darkerBgColor} text-white font-medium text-sm p-1 px-3 rounded-full`}
+                // >
+                //   태그
+                // </span>
+                )} */}
+              {tagItemList}
             </div>
             {/* 문제 디테일에서 가운데 뚫린 부분 컨테이너 */}
             <div
@@ -149,7 +181,10 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     variants={ProblemDetailItemAnimation}
                     className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900 flex justify-center items-center`}
                   >
-                    <h1 className="text-4xl font-medium">10</h1>
+                    <h1 className="text-4xl font-medium">
+                      {" "}
+                      {currentProblemMetadata.level}
+                    </h1>
                     <div
                       className={`absolute -top-4 -left-2 p-1 px-5 flex justify-center items-center ${bgColor} rounded-md`}
                     >
@@ -160,7 +195,10 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     variants={ProblemDetailItemAnimation}
                     className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900 flex justify-center items-center`}
                   >
-                    <h1 className="text-4xl font-medium">10</h1>
+                    <h1 className="text-4xl font-medium">
+                      {" "}
+                      {currentProblemMetadata.averageTries}
+                    </h1>
                     <div
                       className={`absolute -top-4 -left-2 p-1 px-5 flex justify-center items-center ${bgColor} rounded-md`}
                     >
@@ -171,7 +209,10 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     variants={ProblemDetailItemAnimation}
                     className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900 flex justify-center items-center`}
                   >
-                    <h1 className="text-4xl font-medium">10</h1>
+                    <h1 className="text-4xl font-medium">
+                      {" "}
+                      {currentProblemMetadata.acceptedUserCount}
+                    </h1>
                     <div
                       className={`absolute -top-4 -left-2 p-1 px-5 flex justify-center items-center ${bgColor} rounded-md`}
                     >
@@ -186,14 +227,15 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                       className="w-full h-full flex justify-center items-center"
                       target={"_blank"}
                       rel="noreferrer"
-                      href="https://www.google.com"
+                      href={currentProblemMetadata.link}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-10 w-10"
                         viewBox="0 0 20 20"
-                        fill="currentColor"
+                        fill="currentolor"
                       >
+                        C
                         <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
                         <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
                       </svg>
@@ -206,6 +248,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     </div>
                   </motion.div>
                 </motion.div>
+                {/*  */}
               </div>
             </div>
           </div>
