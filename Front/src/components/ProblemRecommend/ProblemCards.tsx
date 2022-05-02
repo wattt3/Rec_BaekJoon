@@ -30,9 +30,9 @@ const ProblemCards: React.FC<IProblemCardContainer> = ({
       style={{ height: `${maxIndex * 100}vh` }}
       className="w-full"
     >
-      {Array.from(Array(problemMetadatas.length).keys()).map((_, i) => (
+      {Array.from(Array(maxIndex).keys()).map((_, i) => (
         <ProblemContainer
-          problemMetaData={problemMetadatas.slice(i, i * 3 + 3)}
+          problemMetaData={problemMetadatas.slice(i * 3, i * 3 + 3)}
           key={i}
           index={i}
         />

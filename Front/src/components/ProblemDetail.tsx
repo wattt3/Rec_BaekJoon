@@ -11,7 +11,6 @@ import {
 } from "../animations/problemDetail";
 import React from "react";
 import { useCombinedStateSelector } from "../redux/hook";
-import { ProblemMetadata } from "../redux/state";
 
 interface IProblemDetail {
   color: ProblemCardColor;
@@ -23,10 +22,6 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
   // const { id: problemId } = useParams();
 
   const { problemId } = useParams<{ problemId?: string }>();
-  console.log(problemId);
-  if (problemId == undefined) {
-    return <div>No matched problemId.</div>;
-  }
 
   const ProblemMetadataList = useCombinedStateSelector(
     (state) => state.userState.recommendProblemsOfCurrentUser
@@ -73,18 +68,20 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
       : "ring-teal-500";
 
   // dispalyNames의 0번째가 한글 이름
-  const tagItemList = currentProblemMetadata.tags
-    .map((tag) => tag.displayNames[0].name)
-    .map((tagName, index) => (
-      <span
-        className={`px-2 py-1 ${darkerBgColor}  rounded-full text-white font-medium`}
-        key={index}
-      >
-        {tagName}
-      </span>
-    ));
+  const tagItemList = currentProblemMetadata
+    ? currentProblemMetadata.tags
+        .map((tag) => tag.displayNames[0].name)
+        .map((tagName, index) => (
+          <span
+            className={`px-2 py-1 ${darkerBgColor}  rounded-full text-white font-medium`}
+            key={index}
+          >
+            {tagName}
+          </span>
+        ))
+    : null;
 
-  return (
+  return currentProblemMetadata ? (
     <motion.section
       initial={{ opacity: 0, y: document.body.clientHeight }}
       animate={{ opacity: 1, y: 0 }}
@@ -95,7 +92,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
       {/* 문제 디테일 빠져 나가는 부분  */}
       <div
         onClick={() => {
-          navigate(routes.PROBLEM_RECOMMEND);
+          navigate(routes.PROBLEM_RECOMMEND, { state: { color: null } });
         }}
         className="w-full p-2 px-5 backdrop-blur-sm hover:backdrop-blur-0 transition-all cursor-pointer flex justify-end items-center group"
       >
@@ -122,14 +119,6 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
               {currentProblemMetadata.title}
             </div>
             <div className="flex flex-wrap w-full justify-start items-center gap-3">
-              {/* {Array.from(Array(5).keys()).map((_, i) =>
-                // <span
-                //   key={i}
-                //   className={`${darkerBgColor} text-white font-medium text-sm p-1 px-3 rounded-full`}
-                // >
-                //   태그
-                // </span>
-                )} */}
               {tagItemList}
             </div>
             {/* 문제 디테일에서 가운데 뚫린 부분 컨테이너 */}
@@ -248,14 +237,13 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     </div>
                   </motion.div>
                 </motion.div>
-                {/*  */}
               </div>
             </div>
           </div>
         </div>
       </div>
     </motion.section>
-  );
+  ) : null;
 };
 
 export default ProblemDetail;

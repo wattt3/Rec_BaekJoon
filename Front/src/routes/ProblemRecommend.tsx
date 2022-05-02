@@ -23,6 +23,22 @@ import { ProblemMetadata, SearchState } from "../redux/state";
 import { setSearchState } from "../redux/slices/problemRecommendSlice";
 
 function ProblemRecommend() {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const isDetailPage = useMatch(routes.PROBLEM_DETAIL());
+  const locationState = location.state as any;
+
+  // 현재 드래그가 가능한지 아닌지를 판단하는 스테이트입니다.
+  const [draggable, setDraggable] = useState(false);
+
+  // maxIndex에 대한 현재 인덱스 스테이트입니다.
+  const [curIndex, setCurIndex] = useState(0);
+
+  // 드래그를 1초에 한번씩 할 수 있게 하는 인터벌 내부에 들어가는 핸들러입니다.
+  const handleDragable = useCallback(() => {
+    setDraggable((prev) => !prev);
+  }, [setDraggable]);
+
   const currentUserName = useCombinedStateSelector(
     (state) => state.userState.currentUserName
   );
@@ -35,7 +51,37 @@ function ProblemRecommend() {
     (state) => state.problemRecommendState.maxProblemNumPerPage
   );
 
-  const dispatch = useDispatch();
+  const problemMetadatas = useCombinedStateSelector(
+    (state) => state.userState.recommendProblemsOfCurrentUser
+  );
+
+  // 휠 이벤트 핸들러입니다.
+  const handleWheel = useCallback(
+    (e: WheelEvent) => {
+      if (draggable) {
+        setDraggable(false);
+        const direction = e.deltaY > 0 ? "DOWN" : "UP";
+        if (maxIndex > 0) {
+          switch (direction) {
+            case "UP":
+              setCurIndex((prev) => (prev === 0 ? 0 : prev - 1));
+              break;
+            case "DOWN":
+              setCurIndex((prev) =>
+                prev === maxIndex - 1 ? maxIndex - 1 : prev + 1
+              );
+              break;
+          }
+        }
+      } else {
+        console.log("blocking wheel");
+      }
+    },
+    [draggable]
+  );
+
+  // 드래그를 1초에 한번씩만 할 수 있게 하는 코드입니다.
+  useInterval(handleDragable, !draggable ? 1000 : null);
 
   useEffect(() => {
     if (!currentUserName) {
@@ -113,49 +159,6 @@ function ProblemRecommend() {
       });
   }, []);
 
-  const location = useLocation();
-
-  // 현재 드래그가 가능한지 아닌지를 판단하는 스테이트입니다.
-  const [draggable, setDraggable] = useState(false);
-
-  // maxIndex에 대한 현재 인덱스 스테이트입니다.
-  const [curIndex, setCurIndex] = useState(0);
-
-  // 드래그를 1초에 한번씩 할 수 있게 하는 인터벌 내부에 들어가는 핸들러입니다.
-  const handleDragable = useCallback(() => {
-    setDraggable((prev) => !prev);
-  }, [setDraggable]);
-
-  // 로딩때 로딩이 완료 된 상태에서 화면을 클릭하면 발생하는 이벤트 핸들러입니다.
-
-  // 휠 이벤트 핸들러입니다.
-  const handleWheel = useCallback(
-    (e: WheelEvent) => {
-      if (draggable) {
-        setDraggable(false);
-        const direction = e.deltaY > 0 ? "DOWN" : "UP";
-        if (maxIndex) {
-          switch (direction) {
-            case "UP":
-              setCurIndex((prev) => (prev === 0 ? 0 : prev - 1));
-              break;
-            case "DOWN":
-              setCurIndex((prev) =>
-                prev === maxIndex - 1 ? maxIndex - 1 : prev + 1
-              );
-              break;
-          }
-        }
-      } else {
-        console.log("blocking wheel");
-      }
-    },
-    [draggable]
-  );
-
-  // 드래그를 1초에 한번씩만 할 수 있게 하는 코드입니다.
-  useInterval(handleDragable, !draggable ? 1000 : null);
-
   // 페이지 전체에 휠 이벤트를 거는 코드입니다.
   useEffect(() => {
     window.addEventListener("wheel", handleWheel, false);
@@ -164,36 +167,35 @@ function ProblemRecommend() {
     };
   }, [handleWheel]);
 
-  const isDetailPage = useMatch(routes.PROBLEM_DETAIL());
-  const locationState = location.state as any;
-  console.log(locationState?.color, isDetailPage);
-
-  const problemMetadatas = useCombinedStateSelector(
-    (state) => state.userState.recommendProblemsOfCurrentUser
-  );
+  console.log(problemMetadatas, maxIndex, isDetailPage);
 
   const renderContainer = (searchState: SearchState) => {
     if (searchState == SearchState.SHOW) {
       return (
-        <div className="w-full h-screen fixed top-0 left-0" key={"clicked"}>
-          {/* 바둑판 배경 */}
-          <RippleMosaic delay={0.5} />
-          <div className="absolute top-0 left-0 w-full h-screen overflow-hidden">
-            {/* 문제 카드들 한 페이지당 3개씩 넣어둠. */}
-            <ProblemCards
-              curIndex={curIndex}
-              maxIndex={maxIndex}
-              problemMetadatas={problemMetadatas}
-            />
-            {/* 문제 리스트에 옆에 달려있는 페이지 프로그레스 바 */}
-            <ProblemAsideProgress maxIndex={maxIndex} curIndex={curIndex} />
-            <AnimatePresence>
-              {locationState?.color && isDetailPage ? (
-                <ProblemDetail color={locationState.color} />
-              ) : null}
-            </AnimatePresence>
+        <>
+          <div className="w-full h-screen" key={"clicked"}>
+            {/* 바둑판 배경 */}
+            <RippleMosaic delay={0.5} />
+            <div className="absolute top-0 left-0 w-full h-screen overflow-hidden">
+              {/* 문제 카드들 한 페이지당 3개씩 넣어둠. */}
+              <ProblemCards
+                curIndex={curIndex}
+                maxIndex={maxIndex}
+                problemMetadatas={problemMetadatas}
+              />
+              {/* 문제 리스트에 옆에 달려있는 페이지 프로그레스 바 */}
+              <ProblemAsideProgress maxIndex={maxIndex} curIndex={curIndex} />
+              <AnimatePresence>
+                {locationState?.color && isDetailPage ? (
+                  <ProblemDetail
+                    key={"detailPage"}
+                    color={locationState.color}
+                  />
+                ) : null}
+              </AnimatePresence>
+            </div>
           </div>
-        </div>
+        </>
       );
     } else {
       return <ProblemRecommendLoading searchState={searchState} />;
