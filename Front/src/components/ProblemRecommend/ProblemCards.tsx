@@ -4,19 +4,19 @@ import { motion, useAnimation } from "framer-motion";
 
 import { useEffect } from "react";
 import ProblemContainer from "./ProblemContainer";
+import { useCombinedStateSelector } from "../../redux/hook";
 
 interface IProblemCardContainer {
-  problemMetadatas: ProblemMetadata[];
   maxIndex: number;
   curIndex: number;
 }
 
 const ProblemCards: React.FC<IProblemCardContainer> = ({
-  problemMetadatas,
   maxIndex,
   curIndex,
 }) => {
   const scrollContainerAnimation = useAnimation();
+
   useEffect(() => {
     scrollContainerAnimation.start({
       translateY: `-${curIndex * 100}vh`,
@@ -31,11 +31,7 @@ const ProblemCards: React.FC<IProblemCardContainer> = ({
       className="w-full"
     >
       {Array.from(Array(maxIndex).keys()).map((_, i) => (
-        <ProblemContainer
-          problemMetaData={problemMetadatas.slice(i * 3, i * 3 + 3)}
-          key={i}
-          index={i}
-        />
+        <ProblemContainer key={i} index={i} />
       ))}
     </motion.div>
   );

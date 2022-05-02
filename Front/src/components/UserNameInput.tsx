@@ -4,7 +4,9 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../App";
 import { useCombinedStateSelector } from "../redux/hook";
+import { setSearchState } from "../redux/slices/problemRecommendSlice";
 import { setCurrentUserName } from "../redux/slices/userSlice";
+import { SearchState } from "../redux/state";
 
 const PopupAnimation: Variants = {
   enter: {
@@ -73,7 +75,17 @@ const UserNameInput: React.FC = () => {
   );
 
   const historyUserNameButtons = historyUserName?.map((userName, index) => {
-    return <button key={index}>{userName}</button>;
+    return (
+      <button
+        key={index}
+        onClick={() => {
+          dispatch(setCurrentUserName(userName));
+          navigate(routes.PROBLEM_RECOMMEND);
+        }}
+      >
+        {userName}
+      </button>
+    );
   });
 
   const favoriteUserName = useCombinedStateSelector(
