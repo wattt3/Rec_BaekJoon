@@ -21,15 +21,17 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
   // problemId를 파악해서 문제에 대한 구체적인 데이터를 가져오면 됨.
   // const { id: problemId } = useParams();
 
-  const { problemId } = useParams<{ problemId?: string }>();
+  const { problemId } = useParams();
 
   const ProblemMetadataList = useCombinedStateSelector(
     (state) => state.userState.recommendProblemsOfCurrentUser
   );
 
-  const currentProblemMetadata = ProblemMetadataList.find(
-    (problemMetadata) => problemMetadata.problemId == parseInt(problemId!)
-  )!;
+  const currentProblemMetadata = problemId
+    ? ProblemMetadataList.find(
+        (problemMetadata) => +problemMetadata.problemId === +problemId
+      )
+    : undefined;
 
   const bgColor =
     color === "indigo"
@@ -81,7 +83,8 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
         ))
     : null;
 
-  return currentProblemMetadata ? (
+  console.log(currentProblemMetadata);
+  return (
     <motion.section
       initial={{ opacity: 0, y: document.body.clientHeight }}
       animate={{ opacity: 1, y: 0 }}
@@ -92,7 +95,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
       {/* 문제 디테일 빠져 나가는 부분  */}
       <div
         onClick={() => {
-          navigate(routes.PROBLEM_RECOMMEND, { state: { color: null } });
+          navigate(routes.PROBLEM_RECOMMEND);
         }}
         className="w-full p-2 px-5 backdrop-blur-sm hover:backdrop-blur-0 transition-all cursor-pointer flex justify-end items-center group"
       >
@@ -116,7 +119,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
         >
           <div className="w-full h-full flex flex-col gap-5 items-start">
             <div className="text-5xl font-semibold text-white">
-              {currentProblemMetadata.title}
+              {currentProblemMetadata?.title}
             </div>
             <div className="flex flex-wrap w-full justify-start items-center gap-3">
               {tagItemList}
@@ -171,7 +174,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900 flex justify-center items-center`}
                   >
                     <h1 className="text-4xl font-medium">
-                      {currentProblemMetadata.level}
+                      {currentProblemMetadata?.level}
                     </h1>
                     <div
                       className={`absolute -top-4 -left-2 p-1 px-5 flex justify-center items-center ${bgColor} rounded-md`}
@@ -184,7 +187,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900 flex justify-center items-center`}
                   >
                     <h1 className="text-4xl font-medium">
-                      {currentProblemMetadata.averageTries}
+                      {currentProblemMetadata?.averageTries}
                     </h1>
                     <div
                       className={`absolute -top-4 -left-2 p-1 px-5 flex justify-center items-center ${bgColor} rounded-md`}
@@ -197,7 +200,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900 flex justify-center items-center`}
                   >
                     <h1 className="text-4xl font-medium">
-                      {currentProblemMetadata.acceptedUserCount}
+                      {currentProblemMetadata?.acceptedUserCount}
                     </h1>
                     <div
                       className={`absolute -top-4 -left-2 p-1 px-5 flex justify-center items-center ${bgColor} rounded-md`}
@@ -213,7 +216,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                       className="w-full h-full flex justify-center items-center"
                       target={"_blank"}
                       rel="noreferrer"
-                      href={currentProblemMetadata.link}
+                      href={currentProblemMetadata?.link}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -240,7 +243,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
         </div>
       </div>
     </motion.section>
-  ) : null;
+  );
 };
 
 export default ProblemDetail;
