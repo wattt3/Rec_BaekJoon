@@ -34,11 +34,6 @@ function ProblemRecommend() {
   // maxIndex에 대한 현재 인덱스 스테이트입니다.
   const [curIndex, setCurIndex] = useState(0);
 
-  // 드래그를 1초에 한번씩 할 수 있게 하는 인터벌 내부에 들어가는 핸들러입니다.
-  const handleDragable = useCallback(() => {
-    setDraggable((prev) => !prev);
-  }, [setDraggable]);
-
   const currentUserName = useCombinedStateSelector(
     (state) => state.userState.currentUserName
   );
@@ -88,11 +83,7 @@ function ProblemRecommend() {
           <RippleMosaic delay={0.5} />
           <div className="absolute top-0 left-0 w-full h-screen overflow-hidden">
             {/* 문제 카드들 한 페이지당 3개씩 넣어둠. */}
-            <ProblemCards
-              curIndex={curIndex}
-              maxIndex={maxIndex}
-              problemMetadatas={problemMetadatas}
-            />
+            <ProblemCards curIndex={curIndex} maxIndex={maxIndex} />
             {/* 문제 리스트에 옆에 달려있는 페이지 프로그레스 바 */}
             <ProblemAsideProgress maxIndex={maxIndex} curIndex={curIndex} />
             <AnimatePresence
@@ -112,12 +103,29 @@ function ProblemRecommend() {
     }
   };
 
+  // 드래그를 1초에 한번씩 할 수 있게 하는 인터벌 내부에 들어가는 핸들러입니다.
+  const handleDragable = useCallback(() => {
+    setDraggable((prev) => !prev);
+  }, [setDraggable]);
+
   // 드래그를 1초에 한번씩만 할 수 있게 하는 코드입니다.
   useInterval(handleDragable, !draggable ? 1000 : null);
+
+  // 페이지 전체에 휠 이벤트를 거는 코드입니다.
+  useEffect(() => {
+    window.addEventListener("wheel", handleWheel, false);
+    return () => {
+      window.removeEventListener("wheel", handleWheel, false);
+    };
+  }, [handleWheel]);
 
   useEffect(() => {
     if (!currentUserName) {
       dispatch(setSearchState(SearchState.UNKNOWN));
+      return;
+    }
+
+    if (searchState != SearchState.PRESEARCH) {
       return;
     }
 
@@ -190,14 +198,6 @@ function ProblemRecommend() {
         dispatch(setSearchState(SearchState.UNKNOWN));
       });
   }, []);
-
-  // 페이지 전체에 휠 이벤트를 거는 코드입니다.
-  useEffect(() => {
-    window.addEventListener("wheel", handleWheel, false);
-    return () => {
-      window.removeEventListener("wheel", handleWheel, false);
-    };
-  }, [handleWheel]);
 
   console.log(problemMetadatas, maxIndex, isDetailPage);
 

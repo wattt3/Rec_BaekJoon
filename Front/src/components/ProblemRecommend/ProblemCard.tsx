@@ -2,24 +2,29 @@
 import { motion, Variants } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../App";
-import { colorApply, ProblemCardColor } from "../../libs/utils";
-import { ProblemMetadata } from "../../redux/state";
+import { ProblemCardColor } from "../../libs/utils";
+import { useCombinedStateSelector } from "../../redux/hook";
 
 interface IProblemCard {
-  problemMetadata: ProblemMetadata;
   cardAnimation: Variants;
   cardColor: ProblemCardColor;
   index: number;
 }
 
 const ProblemCard: React.FC<IProblemCard> = ({
-  problemMetadata,
   cardAnimation,
   cardColor,
   index,
 }) => {
   const navigate = useNavigate();
   const isBig = index % 3 === 1;
+  const problemMetadataList = useCombinedStateSelector(
+    (state) => state.userState.recommendProblemsOfCurrentUser
+  );
+  if (index >= problemMetadataList.length) {
+    return null;
+  }
+  const problemMetadata = problemMetadataList[index];
 
   const showDetail = () => {
     navigate(routes.PROBLEM_DETAIL(problemMetadata.problemId), {

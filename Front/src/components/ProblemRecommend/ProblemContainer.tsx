@@ -7,21 +7,13 @@ import {
   ProblemCardRightTopAnimation,
   ProblemCardRightTopAnimationNoDelay,
 } from "../../animations/problemRecommend";
-import { ProblemMetadata } from "../../redux/state";
 import ProblemCard from "./ProblemCard";
 
 interface IProblemContainer {
   index: number;
-  problemMetaData: ProblemMetadata[];
 }
 
-const ProblemContainer: React.FC<IProblemContainer> = ({
-  index,
-  problemMetaData,
-}) => {
-  const leftProblem = problemMetaData[0];
-  const rightTopProblem = problemMetaData[1];
-  const rightBottomProblem = problemMetaData[2];
+const ProblemContainer: React.FC<IProblemContainer> = ({ index }) => {
   return (
     <div className="w-full h-screen flex justify-center items-center">
       <div className="max-w-screen-lg w-full h-[70vh] p-5 px-10 flex gap-10">
@@ -29,7 +21,6 @@ const ProblemContainer: React.FC<IProblemContainer> = ({
         <div className="w-1/2 h-full">
           <ProblemCard
             index={index * 3 + 1}
-            problemMetadata={leftProblem}
             cardAnimation={
               index > 0
                 ? ProblemCardLeftAnimationNoDelay
@@ -43,7 +34,6 @@ const ProblemContainer: React.FC<IProblemContainer> = ({
           {/* 오른쪽 카드 위쪽 */}
           <ProblemCard
             index={index * 3 + 2}
-            problemMetadata={rightTopProblem}
             cardAnimation={
               index > 0
                 ? ProblemCardRightTopAnimationNoDelay
@@ -54,7 +44,6 @@ const ProblemContainer: React.FC<IProblemContainer> = ({
           {/* 오른쪽 카드 아래쪽 */}
           <ProblemCard
             index={index * 3 + 3}
-            problemMetadata={rightBottomProblem}
             cardAnimation={
               index > 0
                 ? ProblemCardRightBottomAnimationNoDelay

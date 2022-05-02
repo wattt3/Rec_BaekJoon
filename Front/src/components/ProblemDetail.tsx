@@ -11,6 +11,7 @@ import {
 } from "../animations/problemDetail";
 import React from "react";
 import { useCombinedStateSelector } from "../redux/hook";
+import { useDispatch } from "react-redux";
 
 interface IProblemDetail {
   color: ProblemCardColor;
@@ -20,6 +21,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
   const navigate = useNavigate();
   // problemId를 파악해서 문제에 대한 구체적인 데이터를 가져오면 됨.
   // const { id: problemId } = useParams();
+  const dispatch = useDispatch();
 
   const { problemId } = useParams();
 

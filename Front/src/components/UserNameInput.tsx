@@ -73,7 +73,17 @@ const UserNameInput: React.FC = () => {
   );
 
   const historyUserNameButtons = historyUserName?.map((userName, index) => {
-    return <button key={index}>{userName}</button>;
+    return (
+      <button
+        key={index}
+        onClick={() => {
+          dispatch(setCurrentUserName(userName));
+          navigate(routes.PROBLEM_RECOMMEND);
+        }}
+      >
+        {userName}
+      </button>
+    );
   });
 
   const favoriteUserName = useCombinedStateSelector(
