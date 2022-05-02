@@ -19,16 +19,11 @@ interface IProblemDetail {
 
 const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
   const navigate = useNavigate();
-  // problemId를 파악해서 문제에 대한 구체적인 데이터를 가져오면 됨.
-  // const { id: problemId } = useParams();
   const dispatch = useDispatch();
-
   const { problemId } = useParams();
-
   const ProblemMetadataList = useCombinedStateSelector(
     (state) => state.userState.recommendProblemsOfCurrentUser
   );
-
   const currentProblemMetadata = problemId
     ? ProblemMetadataList.find(
         (problemMetadata) => +problemMetadata.problemId === +problemId
@@ -85,14 +80,13 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
         ))
     : null;
 
-  console.log(currentProblemMetadata);
   return (
     <motion.section
       initial={{ opacity: 0, y: document.body.clientHeight }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: document.body.clientHeight }}
       transition={{ duration: 0.5, type: "tween" }}
-      className="fixed top-0 left-0 w-full h-full flex flex-col z-[99] overflow-auto"
+      className="fixed top-0 left-0 w-full h-full flex flex-col z-[99] overflow-hidden"
     >
       {/* 문제 디테일 빠져 나가는 부분  */}
       <div
