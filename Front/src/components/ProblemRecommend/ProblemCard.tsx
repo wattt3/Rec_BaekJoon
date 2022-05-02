@@ -2,9 +2,8 @@
 import { motion, Variants } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../App";
-import { colorApply, ProblemCardColor } from "../../libs/utils";
+import { ProblemCardColor } from "../../libs/utils";
 import { useCombinedStateSelector } from "../../redux/hook";
-import { ProblemMetadata } from "../../redux/state";
 
 interface IProblemCard {
   cardAnimation: Variants;

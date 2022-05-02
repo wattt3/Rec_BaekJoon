@@ -11,9 +11,7 @@ import {
 } from "../animations/problemDetail";
 import React from "react";
 import { useCombinedStateSelector } from "../redux/hook";
-import { ProblemMetadata, SearchState } from "../redux/state";
 import { useDispatch } from "react-redux";
-import { setSearchState } from "../redux/slices/problemRecommendSlice";
 
 interface IProblemDetail {
   color: ProblemCardColor;

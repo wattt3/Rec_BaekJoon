@@ -7,7 +7,6 @@ import {
   ProblemCardRightTopAnimation,
   ProblemCardRightTopAnimationNoDelay,
 } from "../../animations/problemRecommend";
-import { useCombinedStateSelector } from "../../redux/hook";
 import ProblemCard from "./ProblemCard";
 
 interface IProblemContainer {

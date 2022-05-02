@@ -1,10 +1,7 @@
-/* eslint-disable react/prop-types */
-import { ProblemMetadata } from "../../redux/state";
+import React from "react";
 import { motion, useAnimation } from "framer-motion";
-
 import { useEffect } from "react";
 import ProblemContainer from "./ProblemContainer";
-import { useCombinedStateSelector } from "../../redux/hook";
 
 interface IProblemCardContainer {
   maxIndex: number;

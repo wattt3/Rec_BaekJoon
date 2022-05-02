@@ -4,9 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../App";
 import { useCombinedStateSelector } from "../redux/hook";
-import { setSearchState } from "../redux/slices/problemRecommendSlice";
 import { setCurrentUserName } from "../redux/slices/userSlice";
-import { SearchState } from "../redux/state";
 
 const PopupAnimation: Variants = {
   enter: {
