@@ -65,7 +65,7 @@ const ProblemCard: React.FC<IProblemCard> = ({
     >
       <motion.div
         className={`px-3 flex items-end justify-end h-full font-semibold ${
-          isBig ? "text-9xl" : "text-8xl"
+          isBig ? "text-8xl" : "text-7xl"
         }  ${darkerBgColor} ${textColor}`}
       >
         {index}
@@ -74,8 +74,8 @@ const ProblemCard: React.FC<IProblemCard> = ({
         <div className="w-full h-full flex flex-col justify-center items-center gap-10 relative">
           <h1
             className={`${
-              isBig ? "text-6xl" : "text-5xl"
-            } font-semibold text-white`}
+              isBig ? "text-5xl" : "text-4xl"
+            } font-semibold text-white text-center`}
           >
             {problemMetadata.title}
           </h1>

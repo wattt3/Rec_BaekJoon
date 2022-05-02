@@ -172,30 +172,25 @@ function ProblemRecommend() {
   const renderContainer = (searchState: SearchState) => {
     if (searchState == SearchState.SHOW) {
       return (
-        <>
-          <div className="w-full h-screen" key={"clicked"}>
-            {/* 바둑판 배경 */}
-            <RippleMosaic delay={0.5} />
-            <div className="absolute top-0 left-0 w-full h-screen overflow-hidden">
-              {/* 문제 카드들 한 페이지당 3개씩 넣어둠. */}
-              <ProblemCards
-                curIndex={curIndex}
-                maxIndex={maxIndex}
-                problemMetadatas={problemMetadatas}
-              />
-              {/* 문제 리스트에 옆에 달려있는 페이지 프로그레스 바 */}
-              <ProblemAsideProgress maxIndex={maxIndex} curIndex={curIndex} />
-              <AnimatePresence>
-                {locationState?.color && isDetailPage ? (
-                  <ProblemDetail
-                    key={"detailPage"}
-                    color={locationState.color}
-                  />
-                ) : null}
-              </AnimatePresence>
-            </div>
+        <div className="w-full h-screen" key={"clicked"}>
+          {/* 바둑판 배경 */}
+          <RippleMosaic delay={0.5} />
+          <div className="absolute top-0 left-0 w-full h-screen overflow-hidden">
+            {/* 문제 카드들 한 페이지당 3개씩 넣어둠. */}
+            <ProblemCards
+              curIndex={curIndex}
+              maxIndex={maxIndex}
+              problemMetadatas={problemMetadatas}
+            />
+            {/* 문제 리스트에 옆에 달려있는 페이지 프로그레스 바 */}
+            <ProblemAsideProgress maxIndex={maxIndex} curIndex={curIndex} />
+            <AnimatePresence>
+              {locationState?.color && isDetailPage ? (
+                <ProblemDetail color={locationState.color} />
+              ) : null}
+            </AnimatePresence>
           </div>
-        </>
+        </div>
       );
     } else {
       return <ProblemRecommendLoading searchState={searchState} />;

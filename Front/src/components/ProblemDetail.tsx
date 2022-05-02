@@ -171,7 +171,6 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900 flex justify-center items-center`}
                   >
                     <h1 className="text-4xl font-medium">
-                      {" "}
                       {currentProblemMetadata.level}
                     </h1>
                     <div
@@ -185,7 +184,6 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900 flex justify-center items-center`}
                   >
                     <h1 className="text-4xl font-medium">
-                      {" "}
                       {currentProblemMetadata.averageTries}
                     </h1>
                     <div
@@ -199,7 +197,6 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900 flex justify-center items-center`}
                   >
                     <h1 className="text-4xl font-medium">
-                      {" "}
                       {currentProblemMetadata.acceptedUserCount}
                     </h1>
                     <div
@@ -220,7 +217,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-10 w-10"
+                        className="h-10 w-10 fill-white"
                         viewBox="0 0 20 20"
                         fill="currentolor"
                       >
