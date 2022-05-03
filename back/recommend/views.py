@@ -1,4 +1,3 @@
-#from importlib.metadata import metadata
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import generics
@@ -115,6 +114,7 @@ def problem_get(request):
         metadataList = {'problems':[]}
         for pid in serializer.data['problems']['problemList']:
             prob = Problem.objects.get(id=pid)
+            text = Text.objects.get(id=pid)
 
             url = urllib.request.Request("https://solved.ac/api/v3/problem/show?problemId=" + (str)(prob.number))
             url.add_header("Content-Type", "application/json")
@@ -124,7 +124,8 @@ def problem_get(request):
             metadata = {"problemId":(str)(data["problemId"]), "title":data["titleKo"],
                         "level":(str)(data["level"]), "averageTries":(str)(data["averageTries"]),
                         "acceptedUserCount":(str)(data["acceptedUserCount"]), "tags":data["tags"],
-                        "link":'https://www.acmicpc.net/problem/' + (str)(data["problemId"])}
+                        "link":'https://www.acmicpc.net/problem/' + (str)(data["problemId"]),
+                        "text":(str)(text.text)}
             metadataList['problems'].append(metadata)
 
         return JsonResponse(metadataList, status = 200)
