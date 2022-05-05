@@ -19,7 +19,6 @@ interface IProblemDetail {
 
 const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { problemId } = useParams();
   const ProblemMetadataList = useCombinedStateSelector(
     (state) => state.userState.recommendProblemsOfCurrentUser
@@ -134,25 +133,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                   animate="animate"
                   className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900`}
                 >
-                  <h1>
-                    혜아는 $N$개의 신발을 신고 있다. $i$번째 신발의 능력치를
-                    $A_i$라고 하자. 혜아는 현재 위치에서 $A_1 + A_2 + \cdots +
-                    A_N$ km 떨어진 보물이 숨겨진 곳으로 가려고 한다. 걷기 귀찮은
-                    혜아는, 신발의 추진력(!)을 사용해서 점프를 하려고 한다.
-                    혜아가 점프를 할 때, $i$번째 신발을 사용 하면, 현재 위치에서
-                    $A_i$ km 떨어진 곳으로 점프 할 수 있다. 점프를 하면, 신발은
-                    닳아 없어진다. 모든 신발을 보물이 있는 방향으로 한번씩
-                    사용하면, 혜아는 보물이 있는 곳에 도달하여 건물주가 될 수
-                    있을것이다. 혜아가 건물주가 된다는 말을 들은 카흐는,
-                    건물에만 틀어박힐 혜아를 걱정해서, $M$개의 이불을 놓았다.
-                    이불은, 시작좌표로 부터 보물이 숨겨진 곳을 일직선으로 있는
-                    직선 위에 놓여 있으며, 점프를 해서 착지한 위치가 이불
-                    위라면, 혜아는 이불에서 나오지 않아서 보물을 찾지 못할
-                    것이다. 그는 보물보다, 이불이 더 유혹적이기 때문에, 보물이
-                    있는 곳에 이불이 있으면, 보물을 찾지 않고 바로 이불에
-                    누워버릴 것이다. 혜아를 위해, 이불이 있는 곳을 피해서 보물이
-                    있는 곳에 도착하기 위한 방법을 계산 해 주자.
-                  </h1>
+                  <h1>{currentProblemMetadata?.text}</h1>
                   <div
                     className={`absolute -top-4 -left-2 p-1 px-5 flex justify-center items-center ${bgColor} rounded-md`}
                   >

@@ -61,6 +61,9 @@ export interface ProblemMetadata {
 
   // 백준으로 넘어갈 수 있는 링크
   link: string;
+
+  // 문제 설명
+  text: string;
 }
 
 export enum SearchState {

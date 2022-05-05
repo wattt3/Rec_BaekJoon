@@ -178,6 +178,7 @@ function ProblemRecommend() {
                     acceptedUserCount: problem.acceptedUserCount,
                     tags: problem.tags,
                     link: problem.link,
+                    text: problem.text,
                   } as ProblemMetadata;
                 });
               };
@@ -197,7 +198,7 @@ function ProblemRecommend() {
         console.log(err);
         dispatch(setSearchState(SearchState.UNKNOWN));
       });
-  }, []);
+  }, [searchState]);
 
   console.log(problemMetadatas, maxIndex, isDetailPage);
 
