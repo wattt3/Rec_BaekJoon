@@ -86,11 +86,7 @@ function ProblemRecommend() {
             <ProblemCards curIndex={curIndex} maxIndex={maxIndex} />
             {/* 문제 리스트에 옆에 달려있는 페이지 프로그레스 바 */}
             <ProblemAsideProgress maxIndex={maxIndex} curIndex={curIndex} />
-            <AnimatePresence
-              onExitComplete={() => {
-                console.log("out!!!!!");
-              }}
-            >
+            <AnimatePresence>
               {isDetailPage && locationState?.color ? (
                 <ProblemDetail color={locationState.color} />
               ) : null}
