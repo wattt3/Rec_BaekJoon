@@ -100,7 +100,7 @@ const UserNameInput: React.FC = () => {
     <>
       <div
         className={
-          "cursor-pointer hover:font-bold ml-[20px] inline-flex " +
+          "text-gray-400 cursor-pointer hover:font-bold ml-[20px] inline-flex " +
           favoriteUserStyle(userName)
         }
         onClick={buttonOnClickHandler(userName, false)}
@@ -108,7 +108,7 @@ const UserNameInput: React.FC = () => {
         ★
       </div>
       <div
-        className="ml-[10px] cursor-pointer hover:font-bold inline-flex"
+        className="text-gray-400 ml-[10px] cursor-pointer hover:font-bold inline-flex"
         onClick={buttonOnClickHandler(userName, true)}
       >
         -
@@ -149,7 +149,7 @@ const UserNameInput: React.FC = () => {
         </div>
         <div
           className={
-            "cursor-pointer hover:font-bold ml-[20px] inline-flex " +
+            "text-gray-400 cursor-pointer hover:font-bold ml-[20px] inline-flex " +
             favoriteUserStyle(userName)
           }
           onClick={buttonOnClickHandler(userName, false)}

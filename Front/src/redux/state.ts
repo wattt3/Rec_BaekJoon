@@ -42,19 +42,19 @@ export interface Tag {
 // 문제의 정보를 담고 있습니다.
 export interface ProblemMetadata {
   // 문제의 id
-  problemId: number;
+  problemId: string;
 
   // 문제의 제목
   title: string;
 
   // 문제의 level
-  level: number;
+  level: string;
 
   // 평균 시도 횟수
-  averageTries: number;
+  averageTries: string;
 
   // 문제 맞은 사람 수
-  acceptedUserCount: number;
+  acceptedUserCount: string;
 
   // 문제의 태그들
   tags: Tag[];

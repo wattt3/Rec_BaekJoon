@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useMatch, useNavigate, useParams } from "react-router-dom";
 import { routes } from "../App";
-import { ProblemCardColor } from "../libs/utils";
+import { convertLevelToTier, ProblemCardColor } from "../libs/utils";
 import StaticMosaic from "./StaticMosaic";
 import { motion } from "framer-motion";
 import {
@@ -160,7 +160,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900 flex justify-center items-center`}
                   >
                     <h1 className="text-4xl font-medium">
-                      {currentProblemMetadata?.level}
+                      {convertLevelToTier(currentProblemMetadata?.level)}
                     </h1>
                     <div
                       className={`absolute -top-4 -left-2 p-1 px-5 flex justify-center items-center ${bgColor} rounded-md`}

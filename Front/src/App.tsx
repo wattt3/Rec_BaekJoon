@@ -8,7 +8,7 @@ export const routes = {
   HOME: "/",
   PROBLEM_RECOMMEND: "/problem-recommend",
   HISTORY: "/history",
-  PROBLEM_DETAIL: (problemId?: number) =>
+  PROBLEM_DETAIL: (problemId?: string) =>
     problemId ? `/problems/${problemId}` : "/problems/:problemId",
   HISTORY_PROBLEM_DETAIL: (problemId?: number) =>
     problemId
