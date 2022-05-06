@@ -2,20 +2,25 @@
 import { useAnimation, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useInterval } from "../../libs/useInterval";
+import HistoryProblemCard from "./HistoryProblemCard";
 
-interface IBigCard {
+interface BigSlider {
   maxIndex: number;
 }
 
-const BigCard: React.FC<IBigCard> = ({ maxIndex }) => {
-  // const dragabble = useRef(true);
-  // const [draggable, setDraggable] = useState(true);
-  const [scrollable, setScrollable] = useState(true);
+const BigSlider: React.FC<BigSlider> = ({ maxIndex }) => {
+  // sldierAnimation은 버튼을 누르면 슬라이더가 움직이게 해주는 애니메이션 객체입니다.
   const sliderAnimation = useAnimation();
-  const [curIndex, setCurIndex] = useState(0);
+  // containerRef는 해당 슬라이더의 3개의 문제를 담은 하나의 페이지의 크기를 측정하기 위해 사용하는 컨테이너 객체입니다.
   const containerRef = useRef<HTMLDivElement | null>(null);
+  // scrollable은 스크롤을 한번에 여러번 하는 것을 막아주는 변수입니다. 일단은 슬라이딩 애니메이션을 보이게 하기 위해 슬라이딩 후에 1초 동안 딜레이를 걸어두었는데, 히스토리 페이지에서 슬라이드 움직이는 방식이 휠로 스크롤 하는 방식이 아니라 없애는 방법도 고려하고 있습니다.
+  const [scrollable, setScrollable] = useState(true);
+  // curIndex은 슬라이더에 현재 어느 페이지에 위치하고 있는지 알려주는 스테이트입니다.
+  const [curIndex, setCurIndex] = useState(0);
+  // containerHeight는 앞서 본 contaierRef의 height 값을 저장하는 스테이트입니다.
   const [containerHeight, setContainerHeight] = useState(0);
 
+  // handleScroll은 스크롤을 발생 시키는 함수입니다. 스크롤이 불가능 하다면 함수는 그냥 종료 되고, 아니면 방향에 따라 curIndex가 변하게 됩니다. 해당 변화는 스크롤의 translateY 값을 변화 시키게 되어 결과적으로 슬라이더가 움직이게 됩니다.
   const handleScroll = (direction: "UP" | "DOWN") => {
     if (!scrollable) return;
     setScrollable((prev) => !prev);
@@ -31,43 +36,16 @@ const BigCard: React.FC<IBigCard> = ({ maxIndex }) => {
     }
   };
 
+  //  스크롤을 한 후에 딜레이를 걸기 위해 사용하는 함수입니다.
   const toggleScrollable = useCallback(
     () => setScrollable((prev) => !prev),
     []
   );
 
+  // 인터벌을 주어서 scrollable이 false면 1초 뒤에 해당 스테이트의 값을 반대로 바꿔줍니다.
   useInterval(toggleScrollable, !scrollable ? 1000 : null);
 
-  // const handleInterval = useCallback(() => {
-  //   setDraggable((prev) => !prev);
-  // }, []);
-
-  // const handleWheel = ({ deltaY }: WheelEvent) => {
-  //   if (draggable) {
-  //     setDraggable(false);
-  //     if (deltaY > 0) {
-  //       console.log("down");
-  //       setCurIndex((prev) => {
-  //         return prev === maxIndex - 1 ? maxIndex - 1 : prev + 1;
-  //       });
-  //     } else {
-  //       console.log("up");
-  //       setCurIndex((prev) => {
-  //         return prev === 0 ? 0 : prev - 1;
-  //       });
-  //     }
-  //   }
-  // };
-
-  // useInterval(handleInterval, !draggable ? 1000 : null);
-
-  // useEffect(() => {
-  //   window.addEventListener("wheel", handleWheel);
-  //   return () => {
-  //     window.removeEventListener("wheel", handleWheel);
-  //   };
-  // }, []);
-
+  // containerHeight가 존재하고, curIndex가 변화한다면 슬라이더의 translateY값을 변동 시켜 슬라이더를 움직이게 해주는 effect 문입니다.
   useEffect(() => {
     if (containerHeight > 0) {
       sliderAnimation.start({
@@ -80,6 +58,7 @@ const BigCard: React.FC<IBigCard> = ({ maxIndex }) => {
     }
   }, [curIndex, containerHeight]);
 
+  // containerRef가 존재한다면 containerHeight 값을 업데이트 하는 effect 문입니다.
   useEffect(() => {
     if (containerRef.current) {
       setContainerHeight(containerRef.current.clientHeight);
@@ -93,42 +72,26 @@ const BigCard: React.FC<IBigCard> = ({ maxIndex }) => {
         ref={containerRef}
         className="w-full h-full overflow-hidden relative"
       >
-        {/* slider items */}
+        {/* 실질적인 아이템들이 담기는 곳으로 3개가 하나의 containerHeight 만큼을 가지게 되고, maxIndex 만큼 길이를 가지고 있습니다. */}
         <motion.div
           animate={sliderAnimation}
           style={{ height: `${containerHeight * maxIndex}px` }}
           className="w-full"
         >
           {Array.from(Array(maxIndex).keys()).map((_, i) => (
+            // 슬라이더의 여러 페이지 중 하나의 페이지를 담당하는 컨테이너로 내부에 3개의 문제카드들을 가지고 있습니다.
             <div
               key={i}
               style={{ height: `${containerHeight}px` }}
-              className="w-full  p-10 grid grid-rows-3 grid-cols-1 gap-5"
+              className="w-full p-10 grid grid-rows-3 grid-cols-1 gap-5"
             >
-              <div className="w-full h-full rounded-3xl overflow-hidden">
-                <div className="w-full h-full bg-indigo-600 flex justify-center items-center">
-                  <span className="font-semibold text-2xl text-white">
-                    문제 제목 {i}
-                  </span>
-                </div>
-              </div>
-              <div className="w-full h-full rounded-3xl overflow-hidden">
-                <div className="w-full h-full bg-rose-600 flex justify-center items-center">
-                  <span className="font-semibold text-2xl text-white">
-                    문제 제목 {i}
-                  </span>
-                </div>
-              </div>
-              <div className="w-full h-full rounded-3xl overflow-hidden">
-                <div className="w-full h-full bg-teal-600 flex justify-center items-center">
-                  <span className="font-semibold text-2xl text-white">
-                    문제 제목 {i}
-                  </span>
-                </div>
-              </div>
+              <HistoryProblemCard color="indigo" />
+              <HistoryProblemCard color="rose" />
+              <HistoryProblemCard color="teal" />
             </div>
           ))}
         </motion.div>
+        {/* 오른쪽에 있는 현재 어느 페이지에 있는지 확인 시켜주는 인디케이터 */}
         <aside className="absolute top-0 right-0 h-full p-3 flex flex-col justify-center items-center gap-3">
           {Array.from(Array(maxIndex).keys()).map((_, i) => (
             <span
@@ -139,7 +102,7 @@ const BigCard: React.FC<IBigCard> = ({ maxIndex }) => {
             ></span>
           ))}
         </aside>
-        {/* control buttons */}
+        {/* 슬라이더 조작에 필요한 위로 올라가는 버튼 */}
         <div className="absolute top-0 left-0 w-full flex justify-center items-center">
           <button
             onClick={() => handleScroll("UP")}
@@ -159,6 +122,7 @@ const BigCard: React.FC<IBigCard> = ({ maxIndex }) => {
             </svg>
           </button>
         </div>
+        {/* 슬라이더 조작에 필요한 아래로 내려가는 버튼 */}
         <div className="absolute bottom-0 left-0 w-full flex justify-center items-center">
           <button
             onClick={() => handleScroll("DOWN")}
@@ -183,4 +147,4 @@ const BigCard: React.FC<IBigCard> = ({ maxIndex }) => {
   );
 };
 
-export default BigCard;
+export default BigSlider;

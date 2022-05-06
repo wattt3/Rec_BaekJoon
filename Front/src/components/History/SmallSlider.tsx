@@ -11,26 +11,35 @@ interface ICard {
   >;
 }
 
-const SmallCard: React.FC<ICard> = ({
+// SmallSlider는 히스토리 페이지에서 불투명한 껍데기를 클릭하면 잠깐 보이는 문제 3개가 담긴 공간입니다.
+// username은 말 그대로 유저에 대한 이름입니다
+// selectedHistory는 클릭 후에 가운데로 이동 되면서 좀 더 큰 상태의 슬라이더를 선택할 때 사용 되는 변수입니다. state형태이고 그래서 setSelectedHistory가 같이 따라오고 있습니다.
+//  재승님이 해주셔야 할 부분은 유저에게 추천한 문제의 정보 3개를 가져와 해당 문제들의 이름을 아래 더미 데이터에 넣어주시면 됩니다.
+
+const SmallSlider: React.FC<ICard> = ({
   username,
   setSelectedHistory,
   selectedHistory,
 }) => {
+  // coverAnimation은 히스토리를 감싸고 있는 불투명한 판떼기를 움직이는 애니메이션 객체입니다.
   const coverAnimation = useAnimation();
+  // animate 함수는 해당 껍데기를 아래로 내려주는 함수입니다. selectedHistory 값을 업데이트 해줌으로써 BigSlider가 튀어나오도록 합니다.
   const animate = async () => {
     await coverAnimation.start({
       y: "100%",
-      transition: { type: "spring", duration: 1 },
+      transition: { type: "spring", duration: 0.7 },
     });
     setSelectedHistory({ username });
   };
+  // unAnimate는 아래로 내려간 껍데기를 다시 원상복구 시켜주는 함수입니다.
   const unAnimate = () => {
     coverAnimation.start({
       y: 0,
-      transition: { type: "spring", duration: 1, delay: 0.5 },
+      transition: { type: "spring", duration: 0.7, delay: 0.5 },
     });
   };
 
+  // selectedHistory가 null이란 말은 유저가 BigSlider를 보다가 나온 것으로 unAnimate를 동작시켜 껍데기를 다시 원상복구 시켜줍니다.
   useEffect(() => {
     if (selectedHistory === null) {
       unAnimate();
@@ -43,6 +52,7 @@ const SmallCard: React.FC<ICard> = ({
         layoutId={username}
         className="w-full h-full bg-slate-800 rounded-3xl relative overflow-hidden ring-4  ring-offset-4 ring-offset-slate-900 ring-slate-800"
       >
+        {/* 여기에다가 특정 유저에게 추천한 문제중에 아무거나 3개 골라서 이름만 넣어주시면 될꺼 같습니다. */}
         <div className="w-full h-full p-10 grid grid-rows-3 grid-cols-1 gap-5 relative">
           <div className="w-full h-full rounded-3xl overflow-hidden">
             <div className="w-full h-full bg-indigo-600 flex justify-center items-center">
@@ -91,10 +101,10 @@ const SmallCard: React.FC<ICard> = ({
           </span>
         </motion.div>
       </motion.div>
-      <div className="w-full p-5 bg-slate-800 rounded-md shadow-inner">
+      <div className="w-full p-5 bg-slate-800 rounded-md">
         <h1 className="text-white font-semibold text-center">{username}</h1>
       </div>
     </div>
   );
 };
-export default SmallCard;
+export default SmallSlider;

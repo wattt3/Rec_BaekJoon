@@ -1,36 +1,21 @@
 /* eslint-disable react/prop-types */
-import { useMatch, useNavigate, useParams } from "react-router-dom";
-import { routes } from "../App";
-import { ProblemCardColor } from "../libs/utils";
-import StaticMosaic from "./StaticMosaic";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
   ProblemDescriptionAnimation,
   ProblemDetailContainerAnimation,
   ProblemDetailItemAnimation,
 } from "../animations/problemDetail";
-import React from "react";
-import { useCombinedStateSelector } from "../redux/hook";
-import { useDispatch } from "react-redux";
+import { routes } from "../App";
+import { ProblemCardColor } from "../libs/utils";
+import StaticMosaic from "./StaticMosaic";
 
-interface IProblemDetail {
+interface IHistoryProblemDetail {
   color: ProblemCardColor;
 }
 
-const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
+const HistoryProblemDetail: React.FC<IHistoryProblemDetail> = ({ color }) => {
   const navigate = useNavigate();
-  const isRecommendDetail = useMatch(routes.PROBLEM_DETAIL());
-  const isHistoryDetail = useMatch(routes.HISTORY_PROBLEM_DETAIL());
-  const { problemId } = useParams();
-  const ProblemMetadataList = useCombinedStateSelector(
-    (state) => state.userState.recommendProblemsOfCurrentUser
-  );
-  const currentProblemMetadata = problemId
-    ? ProblemMetadataList.find(
-        (problemMetadata) => +problemMetadata.problemId === +problemId
-      )
-    : undefined;
-
   const bgColor =
     color === "indigo"
       ? "bg-indigo-500"
@@ -39,15 +24,6 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
       : color === "slate"
       ? "bg-slate-500"
       : "bg-teal-500";
-
-  const darkerBgColor =
-    color === "indigo"
-      ? "bg-indigo-600"
-      : color === "rose"
-      ? "bg-rose-600"
-      : color === "slate"
-      ? "bg-slate-600"
-      : "bg-teal-600";
 
   const lighterBgColor =
     color === "indigo"
@@ -67,40 +43,26 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
       ? "ring-slate-500"
       : "ring-teal-500";
 
-  // dispalyNames의 0번째가 한글 이름
-  const tagItemList = currentProblemMetadata
-    ? currentProblemMetadata.tags
-        .map((tag) => tag.displayNames[0].name)
-        .map((tagName, index) => (
-          <span
-            className={`px-2 py-1 ${darkerBgColor}  rounded-full text-white font-medium`}
-            key={index}
-          >
-            {tagName}
-          </span>
-        ))
-    : null;
-
-  const handleGoBack = () => {
-    const goto = isHistoryDetail
-      ? routes.HISTORY
-      : isRecommendDetail
-      ? routes.PROBLEM_RECOMMEND
-      : routes.HOME;
-    navigate(goto);
-  };
-
   return (
     <motion.section
       initial={{ opacity: 0, y: window.outerHeight }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: window.outerHeight }}
-      transition={{ duration: 0.5, type: "tween" }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.5, type: "tween" },
+      }}
+      exit={{
+        opacity: 0,
+        y: window.outerHeight,
+        transition: { duration: 0.5, type: "tween" },
+      }}
       className="fixed top-0 left-0 w-full h-full flex flex-col z-[99] overflow-hidden"
     >
       {/* 문제 디테일 빠져 나가는 부분  */}
       <div
-        onClick={handleGoBack}
+        onClick={() => {
+          navigate(routes.HISTORY);
+        }}
         className="w-full p-2 px-5 backdrop-blur-sm hover:backdrop-blur-0 transition-all cursor-pointer flex justify-end items-center group"
       >
         <svg
@@ -123,16 +85,18 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
         >
           <div className="w-full h-full flex flex-col gap-5 items-start">
             <div className="text-5xl font-semibold text-white">
-              {currentProblemMetadata?.title}
+              {/* {currentProblemMetadata?.title} */}
+              Title
             </div>
             <div className="flex flex-wrap w-full justify-start items-center gap-3">
-              {tagItemList}
+              {/* {tagItemList} */}
+              tagList
             </div>
             {/* 문제 디테일에서 가운데 뚫린 부분 컨테이너 */}
             <div
               className={`w-full flex-1  overflow-hidden  rounded-3xl shadow-inner text-white ${lighterBgColor} relative`}
             >
-              <div className="absolute w-full h-full">
+              <div className="absolute w-full h-full bg-slate-900">
                 <StaticMosaic />
               </div>
               <div className="absolute w-full h-full p-20 flex flex-col gap-10 overflow-auto">
@@ -142,7 +106,10 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                   animate="animate"
                   className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900`}
                 >
-                  <h1>{currentProblemMetadata?.text}</h1>
+                  <h1>
+                    {/* {currentProblemMetadata?.text} */}
+                    description
+                  </h1>
                   <div
                     className={`absolute -top-4 -left-2 p-1 px-5 flex justify-center items-center ${bgColor} rounded-md`}
                   >
@@ -160,7 +127,8 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900 flex justify-center items-center`}
                   >
                     <h1 className="text-4xl font-medium">
-                      {currentProblemMetadata?.level}
+                      {/* {currentProblemMetadata?.level} */}
+                      level
                     </h1>
                     <div
                       className={`absolute -top-4 -left-2 p-1 px-5 flex justify-center items-center ${bgColor} rounded-md`}
@@ -173,7 +141,8 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900 flex justify-center items-center`}
                   >
                     <h1 className="text-4xl font-medium">
-                      {currentProblemMetadata?.averageTries}
+                      {/* {currentProblemMetadata?.averageTries} */}
+                      averageTiers
                     </h1>
                     <div
                       className={`absolute -top-4 -left-2 p-1 px-5 flex justify-center items-center ${bgColor} rounded-md`}
@@ -186,7 +155,8 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                     className={`relative w-full px-5 py-10 lg:py-5 rounded-md backdrop-blur ring-2 ${ringColor} ring-offset-4 ring-offset-slate-900 flex justify-center items-center`}
                   >
                     <h1 className="text-4xl font-medium">
-                      {currentProblemMetadata?.acceptedUserCount}
+                      {/* {currentProblemMetadata?.acceptedUserCount} */}
+                      acceptedUserCount
                     </h1>
                     <div
                       className={`absolute -top-4 -left-2 p-1 px-5 flex justify-center items-center ${bgColor} rounded-md`}
@@ -202,7 +172,8 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
                       className="w-full h-full flex justify-center items-center"
                       target={"_blank"}
                       rel="noreferrer"
-                      href={currentProblemMetadata?.link}
+                      //   href={currentProblemMetadata?.link}
+                      href={"#"}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -232,4 +203,4 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
   );
 };
 
-export default ProblemDetail;
+export default HistoryProblemDetail;

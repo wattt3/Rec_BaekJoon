@@ -10,6 +10,10 @@ export const routes = {
   HISTORY: "/history",
   PROBLEM_DETAIL: (problemId?: number) =>
     problemId ? `/problems/${problemId}` : "/problems/:problemId",
+  HISTORY_PROBLEM_DETAIL: (problemId?: number) =>
+    problemId
+      ? `/history/problems/${problemId}`
+      : "/history/problems/:problemId",
 };
 
 function App() {
@@ -27,6 +31,10 @@ function App() {
           element={<ProblemRecommend />}
         ></Route>
         <Route path={routes.HISTORY} element={<History />}></Route>
+        <Route
+          path={routes.HISTORY_PROBLEM_DETAIL()}
+          element={<History />}
+        ></Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>

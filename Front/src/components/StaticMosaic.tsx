@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 const MOSAIC_SIZE = 30;
 
@@ -72,4 +72,4 @@ const StaticMosaic: React.FC = () => {
   );
 };
 
-export default StaticMosaic;
+export default React.memo(StaticMosaic);
