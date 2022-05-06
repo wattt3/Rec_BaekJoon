@@ -88,6 +88,7 @@ test("Set current users's recommend problems.", () => {
           acceptedUserCount: 1201,
           tags: [],
           link: "어떤 백준 링크",
+          text: "문제 내용",
         } as ProblemMetadata,
       ])
     )
@@ -104,6 +105,7 @@ test("Set current users's recommend problems.", () => {
         acceptedUserCount: 1201,
         tags: [],
         link: "어떤 백준 링크",
+        text: "문제 내용",
       } as ProblemMetadata,
     ],
   });

@@ -4,7 +4,14 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../App";
 import { useCombinedStateSelector } from "../redux/hook";
-import { setCurrentUserName } from "../redux/slices/userSlice";
+import { setSearchState } from "../redux/slices/problemRecommendSlice";
+import {
+  addUserName,
+  clickUserInputButton,
+  deleteUserName,
+  setCurrentUserName,
+} from "../redux/slices/userSlice";
+import { SearchState } from "../redux/state";
 
 const PopupAnimation: Variants = {
   enter: {
@@ -61,6 +68,7 @@ const UserNameInput: React.FC = () => {
     }
     console.log("user name: ", userName);
     dispatch(setCurrentUserName(userName));
+    dispatch(setSearchState(SearchState.PRESEARCH));
     return navigate(routes.PROBLEM_RECOMMEND);
   };
 
@@ -68,30 +76,88 @@ const UserNameInput: React.FC = () => {
     setIsPopUpHidden(false);
   };
 
-  const historyUserName = useCombinedStateSelector(
-    (state) => state.userState.historyUserNames
+  const historyUserName = useCombinedStateSelector((state) =>
+    Array.from(state.userState.historyUserNames)
   );
 
-  const historyUserNameButtons = historyUserName?.map((userName, index) => {
-    return (
-      <button
-        key={index}
-        onClick={() => {
-          dispatch(setCurrentUserName(userName));
-          navigate(routes.PROBLEM_RECOMMEND);
-        }}
+  const favoriteUserName = useCombinedStateSelector((state) =>
+    Array.from(state.userState.favoriteUserNames)
+  );
+
+  const favoriteUserStyle = (userName: string) => {
+    if (favoriteUserName.includes(userName)) {
+      return "text-yellow-200 ";
+    } else {
+      return "";
+    }
+  };
+
+  const buttonOnClickHandler = (userName: string, isHistory: boolean) => () => {
+    dispatch(clickUserInputButton(userName, isHistory));
+  };
+
+  const buttonTool = (userName: string) => (
+    <>
+      <div
+        className={
+          "cursor-pointer hover:font-bold ml-[20px] inline-flex " +
+          favoriteUserStyle(userName)
+        }
+        onClick={buttonOnClickHandler(userName, false)}
       >
-        {userName}
-      </button>
+        ★
+      </div>
+      <div
+        className="ml-[10px] cursor-pointer hover:font-bold inline-flex"
+        onClick={buttonOnClickHandler(userName, true)}
+      >
+        -
+      </div>
+    </>
+  );
+
+  const historyUserNameButtons = historyUserName.map((userName, index) => {
+    return (
+      <div key={index} className="py-2">
+        <div
+          className="text-left inline-flex cursor-pointer hover:font-bold"
+          onClick={() => {
+            dispatch(setCurrentUserName(userName));
+            dispatch(setSearchState(SearchState.PRESEARCH));
+            navigate(routes.PROBLEM_RECOMMEND);
+          }}
+        >
+          {userName}
+        </div>
+        {buttonTool(userName)}
+      </div>
     );
   });
 
-  const favoriteUserName = useCombinedStateSelector(
-    (state) => state.userState.favoriteUserNames
-  );
-
-  const favoriteUserNameButtons = favoriteUserName?.map((userName, index) => {
-    return <button key={index}>{userName}</button>;
+  const favoriteUserNameButtons = favoriteUserName.map((userName, index) => {
+    return (
+      <div key={index} className="py-2">
+        <div
+          className="text-left inline-flex cursor-pointer hover:font-bold"
+          onClick={() => {
+            dispatch(setCurrentUserName(userName));
+            dispatch(setSearchState(SearchState.PRESEARCH));
+            navigate(routes.PROBLEM_RECOMMEND);
+          }}
+        >
+          {userName}
+        </div>
+        <div
+          className={
+            "cursor-pointer hover:font-bold ml-[20px] inline-flex " +
+            favoriteUserStyle(userName)
+          }
+          onClick={buttonOnClickHandler(userName, false)}
+        >
+          ★
+        </div>
+      </div>
+    );
   });
 
   const historyOnClickHandler = () => {

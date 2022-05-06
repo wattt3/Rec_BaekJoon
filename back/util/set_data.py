@@ -30,8 +30,10 @@ from recommend.models import User, Problem, Recommend, Text
 #    print(line[0])
 #f.close()
 
-#f = open(r"C:\Users\김성준\Desktop\back\csv\text.csv", encoding="UTF-8")
-#rdcsv = csv.reader(f)
-#   obj = Text(id=line[0], text=line[1])
-#    obj.save()
-#f.close()
+f = open(r"C:\Users\김성준\Desktop\back\csv\text.csv", encoding="UTF-8")
+rdcsv = csv.reader(f)
+for line in rdcsv:
+    obj = Text(id=line[0], text=line[1])
+    obj.save()
+    print(line[0])
+f.close()
