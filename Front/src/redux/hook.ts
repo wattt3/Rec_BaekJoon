@@ -1,9 +1,10 @@
 import { TypedUseSelectorHook, useSelector } from "react-redux";
-import { ProblemRecommendState, UserState } from "./state";
+import { HistoryState, ProblemRecommendState, UserState } from "./state";
 
 export interface CombinedState {
   userState: UserState;
   problemRecommendState: ProblemRecommendState;
+  historyState: HistoryState;
 }
 
 export const useCombinedStateSelector: TypedUseSelectorHook<CombinedState> =

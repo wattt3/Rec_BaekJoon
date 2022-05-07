@@ -1,9 +1,15 @@
-import { UserState, ProblemMetadata, Tag, TagDisplayName } from "../state";
+import {
+  UserState,
+  ProblemMetadata,
+  Tag,
+  TagDisplayName,
+  ProblemRelation,
+} from "../state";
 import reducer, {
   addUserName,
   clickUserInputButton,
   setCurrentUserName,
-  setRecommendProblemMetadatas,
+  addRecommendProblem,
 } from "./userSlice";
 
 test("초기 상태 확인", () => {
@@ -11,7 +17,7 @@ test("초기 상태 확인", () => {
     favoriteUserNames: [],
     historyUserNames: [],
     currentUserName: undefined,
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   });
 });
 
@@ -20,21 +26,21 @@ test("Add user's name which is not included", () => {
     favoriteUserNames: ["templer151"],
     historyUserNames: [],
     currentUserName: undefined,
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   };
 
   expect(reducer(previousState, addUserName("anotherUser", false))).toEqual({
     favoriteUserNames: ["templer151", "anotherUser"],
     historyUserNames: [],
     currentUserName: undefined,
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   });
 
   expect(reducer(previousState, addUserName("anotherUser", true))).toEqual({
     favoriteUserNames: ["templer151"],
     historyUserNames: ["anotherUser"],
     currentUserName: undefined,
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   });
 });
 
@@ -43,14 +49,14 @@ test("Do not add users's name which is included", () => {
     favoriteUserNames: ["templer151"],
     historyUserNames: [],
     currentUserName: undefined,
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   };
 
   expect(reducer(previousState, addUserName("templer151", false))).toEqual({
     favoriteUserNames: ["templer151"],
     historyUserNames: [],
     currentUserName: undefined,
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   });
 });
 
@@ -59,14 +65,14 @@ test("Set current user's name", () => {
     favoriteUserNames: ["templer151"],
     historyUserNames: [],
     currentUserName: undefined,
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   };
 
   expect(reducer(previousState, setCurrentUserName("user2"))).toEqual({
     favoriteUserNames: ["templer151"],
     historyUserNames: [],
     currentUserName: "user2",
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   });
 });
 
@@ -75,13 +81,13 @@ test("Set current users's recommend problems.", () => {
     favoriteUserNames: ["templer151"],
     historyUserNames: [],
     currentUserName: "templer151",
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   };
 
   expect(
     reducer(
       previousState,
-      setRecommendProblemMetadatas([
+      addRecommendProblem("templer151", [
         {
           problemId: "1",
           title: "새로운 추천 문제",
@@ -112,31 +118,36 @@ test("Set current users's recommend problems.", () => {
     favoriteUserNames: ["templer151"],
     historyUserNames: [],
     currentUserName: "templer151",
-    recommendProblemsOfCurrentUser: [
+    recommendProblemList: [
       {
-        problemId: "1",
-        title: "새로운 추천 문제",
-        level: "2",
-        averageTries: "12",
-        acceptedUserCount: "1201",
-        tags: [
+        userName: "templer151",
+        problemList: [
           {
-            key: "태그1",
-            isMeta: false,
-            bojTagId: 10,
-            problemCount: 100,
-            displayNames: [
+            problemId: "1",
+            title: "새로운 추천 문제",
+            level: "2",
+            averageTries: "12",
+            acceptedUserCount: "1201",
+            tags: [
               {
-                language: "ko",
-                name: "문제1",
-                short: "문제문제",
-              } as TagDisplayName,
+                key: "태그1",
+                isMeta: false,
+                bojTagId: 10,
+                problemCount: 100,
+                displayNames: [
+                  {
+                    language: "ko",
+                    name: "문제1",
+                    short: "문제문제",
+                  } as TagDisplayName,
+                ],
+              } as Tag,
             ],
-          } as Tag,
+            link: "어떤 백준 링크",
+            text: "문제 내용",
+          } as ProblemMetadata,
         ],
-        link: "어떤 백준 링크",
-        text: "문제 내용",
-      } as ProblemMetadata,
+      } as ProblemRelation,
     ],
   });
 });
@@ -146,7 +157,7 @@ test("즐겨찾기에 들어있는 아이디를 클릭하면 등록해제되어�
     favoriteUserNames: ["templer151"],
     historyUserNames: [],
     currentUserName: undefined,
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   };
 
   expect(
@@ -155,7 +166,7 @@ test("즐겨찾기에 들어있는 아이디를 클릭하면 등록해제되어�
     favoriteUserNames: [],
     historyUserNames: [],
     currentUserName: undefined,
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   });
 
   expect(
@@ -164,7 +175,7 @@ test("즐겨찾기에 들어있는 아이디를 클릭하면 등록해제되어�
     favoriteUserNames: ["templer151", "anotheruser"],
     historyUserNames: [],
     currentUserName: undefined,
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   });
 
   expect(
@@ -173,7 +184,7 @@ test("즐겨찾기에 들어있는 아이디를 클릭하면 등록해제되어�
     favoriteUserNames: ["templer151"],
     historyUserNames: ["templer151"],
     currentUserName: undefined,
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   });
 
   expect(
@@ -182,6 +193,6 @@ test("즐겨찾기에 들어있는 아이디를 클릭하면 등록해제되어�
     favoriteUserNames: ["templer151"],
     historyUserNames: ["anotheruser"],
     currentUserName: undefined,
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   });
 });

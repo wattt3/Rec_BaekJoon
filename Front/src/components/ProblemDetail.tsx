@@ -11,7 +11,7 @@ import {
 } from "../animations/problemDetail";
 import React from "react";
 import { useCombinedStateSelector } from "../redux/hook";
-import { useDispatch } from "react-redux";
+import { ProblemMetadata } from "../redux/state";
 
 interface IProblemDetail {
   color: ProblemCardColor;
@@ -22,12 +22,31 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
   const isRecommendDetail = useMatch(routes.PROBLEM_DETAIL());
   const isHistoryDetail = useMatch(routes.HISTORY_PROBLEM_DETAIL());
   const { problemId } = useParams();
-  const ProblemMetadataList = useCombinedStateSelector(
-    (state) => state.userState.recommendProblemsOfCurrentUser
-  );
+
+  const currentUserName = useCombinedStateSelector((state) => {
+    if (isHistoryDetail) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return state.historyState.currentUserName!;
+    }
+    if (isRecommendDetail) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return state.userState.currentUserName!;
+    }
+    return "";
+  });
+
+  let ProblemMetadataList: ProblemMetadata[] = [];
+  useCombinedStateSelector(
+    (state) => state.userState.recommendProblemList
+  ).forEach((problemRelation) => {
+    if (problemRelation.userName == currentUserName) {
+      ProblemMetadataList = [...problemRelation.problemList];
+    }
+  });
+
   const currentProblemMetadata = problemId
     ? ProblemMetadataList.find(
-        (problemMetadata) => +problemMetadata.problemId === +problemId
+        (problemMetadata) => problemMetadata.problemId == problemId
       )
     : undefined;
 
@@ -89,6 +108,8 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
       : routes.HOME;
     navigate(goto);
   };
+
+  console.log(currentUserName, ProblemMetadataList, currentProblemMetadata);
 
   return (
     <motion.section

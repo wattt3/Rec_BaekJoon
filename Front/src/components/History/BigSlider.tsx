@@ -2,13 +2,15 @@
 import { useAnimation, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useInterval } from "../../libs/useInterval";
+import { useCombinedStateSelector } from "../../redux/hook";
 import HistoryProblemCard from "./HistoryProblemCard";
 
 interface BigSlider {
   maxIndex: number;
+  userName: string;
 }
 
-const BigSlider: React.FC<BigSlider> = ({ maxIndex }) => {
+const BigSlider: React.FC<BigSlider> = ({ maxIndex, userName }) => {
   // sldierAnimation은 버튼을 누르면 슬라이더가 움직이게 해주는 애니메이션 객체입니다.
   const sliderAnimation = useAnimation();
   // containerRef는 해당 슬라이더의 3개의 문제를 담은 하나의 페이지의 크기를 측정하기 위해 사용하는 컨테이너 객체입니다.
@@ -65,6 +67,43 @@ const BigSlider: React.FC<BigSlider> = ({ maxIndex }) => {
     }
   }, [containerRef]);
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const problemList = useCombinedStateSelector(
+    (state) => state.userState.recommendProblemList
+  ).find(
+    (problemRelation) => problemRelation.userName == userName
+  )!.problemList;
+
+  const renderProblemCards = () => {
+    const problemCards: JSX.Element[] = [];
+    for (let index = 0; index + 2 < problemList.length; index = index + 3) {
+      problemCards.push(
+        <div
+          key={index}
+          style={{ height: `${containerHeight}px` }}
+          className="w-full p-10 grid grid-rows-3 grid-cols-1 gap-5"
+        >
+          <HistoryProblemCard
+            color="indigo"
+            problemMetadata={problemList[index]}
+            userName={userName}
+          />
+          <HistoryProblemCard
+            color="rose"
+            problemMetadata={problemList[index + 1]}
+            userName={userName}
+          />
+          <HistoryProblemCard
+            color="teal"
+            problemMetadata={problemList[index + 2]}
+            userName={userName}
+          />
+        </div>
+      );
+    }
+    return problemCards;
+  };
+
   return (
     <motion.div className="w-full h-full bg-slate-800 rounded-3xl overflow-hidden ring-4  ring-offset-4 ring-offset-slate-900 ring-slate-800">
       {/* slider container */}
@@ -78,18 +117,7 @@ const BigSlider: React.FC<BigSlider> = ({ maxIndex }) => {
           style={{ height: `${containerHeight * maxIndex}px` }}
           className="w-full"
         >
-          {Array.from(Array(maxIndex).keys()).map((_, i) => (
-            // 슬라이더의 여러 페이지 중 하나의 페이지를 담당하는 컨테이너로 내부에 3개의 문제카드들을 가지고 있습니다.
-            <div
-              key={i}
-              style={{ height: `${containerHeight}px` }}
-              className="w-full p-10 grid grid-rows-3 grid-cols-1 gap-5"
-            >
-              <HistoryProblemCard color="indigo" />
-              <HistoryProblemCard color="rose" />
-              <HistoryProblemCard color="teal" />
-            </div>
-          ))}
+          {renderProblemCards()}
         </motion.div>
         {/* 오른쪽에 있는 현재 어느 페이지에 있는지 확인 시켜주는 인디케이터 */}
         <aside className="absolute top-0 right-0 h-full p-3 flex flex-col justify-center items-center gap-3">

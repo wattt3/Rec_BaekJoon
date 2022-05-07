@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserState, ProblemMetadata } from "../state";
+import { UserState, ProblemMetadata, ProblemRelation } from "../state";
 
 interface addUserNameAction {
   userName: string;
@@ -16,13 +16,18 @@ interface ClickUserInputButtonAction {
   isHistory: boolean;
 }
 
+interface AddRecommendProblemAction {
+  userName: string;
+  problemList: ProblemMetadata[];
+}
+
 const userSlice = createSlice({
   name: "USER",
   initialState: {
     favoriteUserNames: [],
     historyUserNames: [],
     currentUserName: undefined,
-    recommendProblemsOfCurrentUser: [],
+    recommendProblemList: [],
   } as UserState,
   reducers: {
     addUserName: {
@@ -144,14 +149,22 @@ const userSlice = createSlice({
         currentUserName: action.payload,
       };
     },
-    setRecommendProblemMetadatas: (
-      state,
-      action: PayloadAction<ProblemMetadata[]>
-    ) => {
-      return {
-        ...state,
-        recommendProblemsOfCurrentUser: [...action.payload],
-      };
+    addRecommendProblem: {
+      reducer: (state, action: PayloadAction<AddRecommendProblemAction>) => {
+        return {
+          ...state,
+          recommendProblemList: [
+            {
+              userName: action.payload.userName,
+              problemList: [...action.payload.problemList],
+            } as ProblemRelation,
+            ...state.recommendProblemList,
+          ],
+        };
+      },
+      prepare: (userName: string, problemList: ProblemMetadata[]) => {
+        return { payload: { userName, problemList } };
+      },
     },
   },
 });
@@ -160,7 +173,7 @@ export const {
   addUserName,
   deleteUserName,
   setCurrentUserName,
-  setRecommendProblemMetadatas,
+  addRecommendProblem,
   clickUserInputButton,
 } = userSlice.actions;
 export default userSlice.reducer;

@@ -18,9 +18,19 @@ const ProblemCard: React.FC<IProblemCard> = ({
 }) => {
   const navigate = useNavigate();
   const isBig = index % 3 === 1;
-  const problemMetadataList = useCombinedStateSelector(
-    (state) => state.userState.recommendProblemsOfCurrentUser
+
+  const currentUserName = useCombinedStateSelector(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    (state) => state.userState.currentUserName!
   );
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const problemMetadataList = useCombinedStateSelector(
+    (state) => state.userState.recommendProblemList
+  ).find(
+    (problemRelation) => problemRelation.userName == currentUserName
+  )!.problemList;
+
   if (index >= problemMetadataList.length) {
     return null;
   }

@@ -10,7 +10,7 @@ export const routes = {
   HISTORY: "/history",
   PROBLEM_DETAIL: (problemId?: string) =>
     problemId ? `/problems/${problemId}` : "/problems/:problemId",
-  HISTORY_PROBLEM_DETAIL: (problemId?: number) =>
+  HISTORY_PROBLEM_DETAIL: (problemId?: string) =>
     problemId
       ? `/history/problems/${problemId}`
       : "/history/problems/:problemId",

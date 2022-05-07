@@ -2,6 +2,7 @@
 import { useAnimation, motion } from "framer-motion";
 import { useEffect } from "react";
 import { ISelectedHistory } from "../../routes/History";
+import { useCombinedStateSelector } from "../../redux/hook";
 
 interface ICard {
   username: string;
@@ -46,6 +47,13 @@ const SmallSlider: React.FC<ICard> = ({
     }
   }, [selectedHistory]);
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const problemList = useCombinedStateSelector(
+    (state) => state.userState.recommendProblemList
+  ).find(
+    (problemRelation) => problemRelation.userName == username
+  )!.problemList;
+
   return (
     <div className="w-full h-full flex flex-col gap-5">
       <motion.div
@@ -57,21 +65,21 @@ const SmallSlider: React.FC<ICard> = ({
           <div className="w-full h-full rounded-3xl overflow-hidden">
             <div className="w-full h-full bg-indigo-600 flex justify-center items-center">
               <span className="font-semibold text-2xl text-white">
-                문제 제목
+                {problemList[0].title}
               </span>
             </div>
           </div>
           <div className="w-full h-full rounded-3xl overflow-hidden">
             <div className="w-full h-full bg-rose-600 flex justify-center items-center">
               <span className="font-semibold text-2xl text-white">
-                문제 제목
+                {problemList[1].title}
               </span>
             </div>
           </div>
           <div className="w-full h-full rounded-3xl overflow-hidden">
             <div className="w-full h-full bg-teal-600 flex justify-center items-center">
               <span className="font-semibold text-2xl text-white">
-                문제 제목
+                {problemList[2].title}
               </span>
             </div>
           </div>

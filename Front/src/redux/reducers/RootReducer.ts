@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import historySlice from "../slices/historySlice";
 import problemRecommendSlice from "../slices/problemRecommendSlice";
 import userSlice from "../slices/userSlice";
 
@@ -18,5 +19,6 @@ export const rootReducer = persistReducer(
   combineReducers({
     userState: userSlice,
     problemRecommendState: problemRecommendSlice,
+    historyState: historySlice,
   })
 );

@@ -1,3 +1,8 @@
+export interface ProblemRelation {
+  userName: string;
+  problemList: ProblemMetadata[];
+}
+
 // 접속한 유저에 관련된 state
 export interface UserState {
   // 유저가 즐겨찾기 해놓은 아이디들
@@ -9,8 +14,8 @@ export interface UserState {
   // 유저가 현재 검색한 아이디
   currentUserName: string | undefined;
 
-  // 현재 유저의 추천 문제 리스트
-  recommendProblemsOfCurrentUser: ProblemMetadata[];
+  // 추천 문제 리스트
+  recommendProblemList: ProblemRelation[];
 }
 
 export interface TagDisplayName {
@@ -91,6 +96,10 @@ export interface ProblemRecommendState {
 
   // 전체 데이터를 한 페이지당 3개씩 넣어줄 경우에 최대 페이지에 대한 스테이트입니다.
   maxProblemNumPerPage: number;
+}
+
+export interface HistoryState {
+  currentUserName?: string;
 }
 
 // 문제 추천 페이지 필요한 기능

@@ -1,9 +1,10 @@
+import React from "react";
+
 interface IHomeSliderItem {
   svg: React.ReactNode;
   title: string;
 }
 
-// eslint-disable-next-line react/prop-types
 const HomeSliderItem: React.FC<IHomeSliderItem> = ({ svg, title }) => {
   return (
     <div className="w-96 h-full px-3">

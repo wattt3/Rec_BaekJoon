@@ -1,10 +1,10 @@
 import { Helmet } from "react-helmet";
+import React from "react";
 
 interface IPageTitle {
   title: string;
 }
 
-// eslint-disable-next-line react/prop-types
 const PageTitle: React.FC<IPageTitle> = ({ title }) => {
   return (
     <Helmet>

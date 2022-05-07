@@ -6,9 +6,7 @@ import { routes } from "../App";
 import { useCombinedStateSelector } from "../redux/hook";
 import { setSearchState } from "../redux/slices/problemRecommendSlice";
 import {
-  addUserName,
   clickUserInputButton,
-  deleteUserName,
   setCurrentUserName,
 } from "../redux/slices/userSlice";
 import { SearchState } from "../redux/state";

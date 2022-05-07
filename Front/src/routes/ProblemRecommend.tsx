@@ -12,10 +12,7 @@ import { useInterval } from "../libs/useInterval";
 import ProblemCards from "../components/ProblemRecommend/ProblemCards";
 import ProblemAsideProgress from "../components/ProblemRecommend/ProblemAsideProgress";
 import ProblemRecommendLoading from "../components/ProblemRecommend/ProblemRecommendLoading";
-import {
-  addUserName,
-  setRecommendProblemMetadatas,
-} from "../redux/slices/userSlice";
+import { addUserName, addRecommendProblem } from "../redux/slices/userSlice";
 import { useLocation, useMatch } from "react-router-dom";
 import { routes } from "../App";
 import ProblemDetail from "../components/ProblemDetail";
@@ -26,6 +23,8 @@ function ProblemRecommend() {
   const dispatch = useDispatch();
   const location = useLocation();
   const isDetailPage = useMatch(routes.PROBLEM_DETAIL());
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const locationState = location.state as any;
 
   // 현재 드래그가 가능한지 아닌지를 판단하는 스테이트입니다.
@@ -46,8 +45,8 @@ function ProblemRecommend() {
     (state) => state.problemRecommendState.maxProblemNumPerPage
   );
 
-  const problemMetadatas = useCombinedStateSelector(
-    (state) => state.userState.recommendProblemsOfCurrentUser
+  const recommendProblemList = useCombinedStateSelector(
+    (state) => state.userState.recommendProblemList
   );
 
   // 휠 이벤트 핸들러입니다.
@@ -125,6 +124,15 @@ function ProblemRecommend() {
       return;
     }
 
+    if (
+      recommendProblemList
+        .map((problemRelation) => problemRelation.userName)
+        .includes(currentUserName)
+    ) {
+      dispatch(setSearchState(SearchState.SUCCESS));
+      return;
+    }
+
     fetch("/api/user/check/", {
       method: "POST",
       credentials: "include",
@@ -179,7 +187,9 @@ function ProblemRecommend() {
                 });
               };
 
-              dispatch(setRecommendProblemMetadatas(typedProblemsInResponse()));
+              dispatch(
+                addRecommendProblem(currentUserName, typedProblemsInResponse())
+              );
               dispatch(setSearchState(SearchState.SUCCESS));
             })
             .catch((err) => {
@@ -195,8 +205,6 @@ function ProblemRecommend() {
         dispatch(setSearchState(SearchState.UNKNOWN));
       });
   }, [searchState]);
-
-  console.log(problemMetadatas, maxIndex, isDetailPage);
 
   return (
     <Container>
