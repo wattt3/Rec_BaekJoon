@@ -49,10 +49,13 @@ export default function History() {
         {/* 유저가 특정 히스토리를 누르면 뚜겅이 내려가고 가운데로 오면서 주위 환경이 블러 처리되고, 집중하여 클릭한 히스토리를 볼 수 있게 해주는 부분. */}
         {selectedHistory ? (
           <aside className="fixed z-50 top-0 left-0 w-full h-full flex justify-center items-center">
-            <div
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, type: "tween" }}
               onClick={() => setSelectedHistory(null)}
-              className="w-full h-full backdrop-blur cursor-pointer"
-            ></div>
+              className="w-full h-full backdrop-blur-2xl cursor-pointer"
+            ></motion.div>
             <motion.div
               layoutId={selectedHistory.username}
               className="absolute h-[80%] aspect-[1/1.5] flex flex-col gap-5 px-5"
