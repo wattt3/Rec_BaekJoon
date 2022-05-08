@@ -79,9 +79,7 @@ const ProblemCard: React.FC<IProblemCard> = ({
       className={`w-full h-full flex relative rounded-3xl overflow-hidden cursor-pointer ${bgColor}`}
     >
       <motion.div
-        className={`px-3 flex items-end justify-end h-full font-semibold ${
-          isBig ? "text-8xl" : "text-7xl"
-        }  ${darkerBgColor} ${textColor}`}
+        className={`px-3 flex items-end justify-end h-full font-semibold text-7xl lg:text-8xl  ${darkerBgColor} ${textColor}`}
       >
         {index}
       </motion.div>
