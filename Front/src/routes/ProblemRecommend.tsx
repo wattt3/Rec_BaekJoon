@@ -209,7 +209,7 @@ function ProblemRecommend() {
   return (
     <Container>
       <PageTitle title="문제 추천" />
-      <main className="w-full min-h-screen flex justify-center items-center">
+      <main className="w-full h-screen flex justify-center items-center pt-20 overflow-hidden">
         <AnimatePresence exitBeforeEnter>
           {renderContainer(searchState)}
         </AnimatePresence>

@@ -22,6 +22,20 @@ const RippleMosaic: React.FC<IRippleMosaic> = ({ delay }) => {
   const ripple = useRef<Ripple | null>(null);
   const dots = useRef<Dot[]>([]);
 
+  const resize = () => {
+    if (container.current) {
+      stageWidth.current = container.current.clientWidth;
+      stageHeight.current = container.current.clientHeight;
+
+      canvas.current.width = stageWidth.current * pixelRatio.current;
+      canvas.current.height = stageHeight.current * pixelRatio.current;
+      if (ripple.current) {
+        ripple.current.resize(stageWidth.current, stageHeight.current);
+      }
+      createDots();
+    }
+  };
+
   const clickCenter = () => {
     if (canvas.current) {
       const position = canvas.current.getBoundingClientRect();
@@ -59,6 +73,7 @@ const RippleMosaic: React.FC<IRippleMosaic> = ({ delay }) => {
   };
 
   const createDots = () => {
+    dots.current = [];
     const columns = Math.ceil(stageWidth.current / PIXEL_SIZE);
     const rows = Math.ceil(stageHeight.current / PIXEL_SIZE);
 
@@ -88,31 +103,19 @@ const RippleMosaic: React.FC<IRippleMosaic> = ({ delay }) => {
 
   useEffect(() => {
     if (container.current) {
-      stageWidth.current = container.current.clientWidth;
-      stageHeight.current = container.current.clientHeight;
-
-      canvas.current.width = stageWidth.current * pixelRatio.current;
-      canvas.current.height = stageHeight.current * pixelRatio.current;
-
+      resize();
       ctx.current?.scale(pixelRatio.current, pixelRatio.current);
       container.current.appendChild(canvas.current);
-
-      // image.current.src = imgSrc;
-      // image.current.crossOrigin = "Anonymous";
-      // image.current.onload = () => {
-      //   isloaded.current = true;
-      //    drawImage();
-      // };
-
-      createDots();
 
       ripple.current = new Ripple(stageWidth.current, stageHeight.current);
 
       window.requestAnimationFrame(animate);
       canvas.current.addEventListener("click", onClick, false);
+      window.addEventListener("resize", resize);
 
       return () => {
         canvas.current.removeEventListener("click", onClick, false);
+        window.removeEventListener("resize", resize);
       };
     }
   }, []);

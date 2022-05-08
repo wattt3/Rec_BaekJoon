@@ -121,28 +121,30 @@ const ProblemRecommendLoading: React.FC<IProblemRecommendLoading> = ({
       initial="enter"
       animate="animate"
       exit={"exit"}
-      className="w-full max-w-screen-sm aspect-square ring-4 ring-offset-4 ring-slate-700 ring-offset-slate-900 bg-transparent rounded-3xl relative shadow-2xl overflow-hidden"
+      className="w-full max-w-screen-sm aspect-square p-5"
     >
-      {/* 로딩 움직이는 그래디언트 */}
-      <motion.div
-        ref={container}
-        variants={LoadingGradientAnimation}
-        className="w-full h-full"
-      >
-        <MovingGradient
-          width={container.current?.clientWidth || 0}
-          height={container.current?.clientHeight || 0}
-        />
-      </motion.div>
-      {/* 그래디언트 위에 올라올 텍스트 컨테이너 */}
-      <motion.div
-        variants={LoadingTextAnimation}
-        className="absolute top-0 left-0 w-full h-full flex justify-center items-center "
-      >
-        <AnimatePresence exitBeforeEnter>
-          {renderLoadingState()}
-        </AnimatePresence>
-      </motion.div>
+      <div className="w-full h-full ring-4 ring-offset-4 ring-slate-700 ring-offset-slate-900 bg-transparent rounded-3xl relative overflow-hidden">
+        {/* 로딩 움직이는 그래디언트 */}
+        <motion.div
+          ref={container}
+          variants={LoadingGradientAnimation}
+          className="w-full h-full"
+        >
+          <MovingGradient
+            width={container.current?.clientWidth || 0}
+            height={container.current?.clientHeight || 0}
+          />
+        </motion.div>
+        {/* 그래디언트 위에 올라올 텍스트 컨테이너 */}
+        <motion.div
+          variants={LoadingTextAnimation}
+          className="absolute top-0 left-0 w-full h-full flex justify-center items-center "
+        >
+          <AnimatePresence exitBeforeEnter>
+            {renderLoadingState()}
+          </AnimatePresence>
+        </motion.div>
+      </div>
     </motion.div>
   );
 };

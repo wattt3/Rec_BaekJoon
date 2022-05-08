@@ -18,6 +18,11 @@ export class Ripple {
     this.speed = 10;
   }
 
+  resize(stageWidth: number, stageHeight: number) {
+    this.stageWidth = stageWidth;
+    this.stageHeight = stageHeight;
+  }
+
   animate() {
     if (this.radius < this.maxRadius) {
       this.radius += this.speed;

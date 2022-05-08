@@ -89,7 +89,7 @@ const ProblemCard: React.FC<IProblemCard> = ({
         <div className="w-full h-full flex flex-col justify-center items-center gap-10 relative">
           <h1
             className={`${
-              isBig ? "text-5xl" : "text-4xl"
+              isBig ? "lg:text-5xl text-3xl" : "lg:text-4xl text-2xl"
             } font-semibold text-white text-center`}
           >
             {problemMetadata.title}
