@@ -64,21 +64,21 @@ const SmallSlider: React.FC<ICard> = ({
         <div className="w-full h-full p-10 grid grid-rows-3 grid-cols-1 gap-5 relative">
           <div className="w-full h-full rounded-3xl overflow-hidden">
             <div className="w-full h-full bg-indigo-600 flex justify-center items-center">
-              <span className="font-semibold text-2xl text-white">
+              <span className="font-semibold text-lg text-white">
                 {problemList[0].title}
               </span>
             </div>
           </div>
           <div className="w-full h-full rounded-3xl overflow-hidden">
             <div className="w-full h-full bg-rose-600 flex justify-center items-center">
-              <span className="font-semibold text-2xl text-white">
+              <span className="font-semibold text-lg text-white">
                 {problemList[1].title}
               </span>
             </div>
           </div>
           <div className="w-full h-full rounded-3xl overflow-hidden">
             <div className="w-full h-full bg-teal-600 flex justify-center items-center">
-              <span className="font-semibold text-2xl text-white">
+              <span className="font-semibold text-lg text-white">
                 {problemList[2].title}
               </span>
             </div>

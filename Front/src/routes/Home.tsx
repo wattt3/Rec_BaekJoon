@@ -3,6 +3,7 @@ import { AnimatePresence, motion, Variants } from "framer-motion";
 import { useState } from "react";
 import Container from "../components/Container";
 import HomeSliderItem from "../components/HomeSliderItem";
+import PageTitle from "../components/PageTitle";
 import {
   FingerPrintSvg,
   GlobeAltSvg,
@@ -129,6 +130,7 @@ function Home() {
 
   return (
     <Container>
+      <PageTitle title="홈" />
       <main className="w-full h-screen flex flex-col justify-center items-center overflow-hidden relative">
         <div className="w-full h-[60vh] overflow-hidden">
           <motion.div

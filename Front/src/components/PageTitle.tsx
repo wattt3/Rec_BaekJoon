@@ -8,7 +8,7 @@ interface IPageTitle {
 const PageTitle: React.FC<IPageTitle> = ({ title }) => {
   return (
     <Helmet>
-      <title>{title} | 프론트</title>
+      <title>{title} | 하루백준</title>
     </Helmet>
   );
 };

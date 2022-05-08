@@ -8,6 +8,7 @@ import { useLocation, useMatch } from "react-router-dom";
 import { routes } from "../App";
 import ProblemDetail from "../components/ProblemDetail";
 import { useCombinedStateSelector } from "../redux/hook";
+import PageTitle from "../components/PageTitle";
 
 export interface ISelectedHistory {
   username: string;
@@ -39,6 +40,7 @@ export default function History() {
 
   return (
     <Container>
+      <PageTitle title="히스토리" />
       <div className="w-full min-h-screen pt-20 relative">
         <div className="w-full p-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  2xl:grid-cols-4 gap-10">
           {/* 해당 부분에 지금은 더미 데이터가 들어가 있지만, 실제로는 리덕스에서 추천 받았던 모든 유저에 대한 정보를 담은 배열이 들어오면 됩니다. */}

@@ -12,6 +12,7 @@ import {
 import React from "react";
 import { useCombinedStateSelector } from "../redux/hook";
 import { ProblemMetadata } from "../redux/state";
+import PageTitle from "./PageTitle";
 
 interface IProblemDetail {
   color: ProblemCardColor;
@@ -119,6 +120,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
       transition={{ duration: 0.5, type: "tween" }}
       className="fixed top-0 left-0 w-full h-full flex flex-col z-[99] overflow-hidden"
     >
+      <PageTitle title={currentProblemMetadata?.title || "문제 디테일"} />
       {/* 문제 디테일 빠져 나가는 부분  */}
       <div
         onClick={handleGoBack}
