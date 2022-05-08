@@ -21,6 +21,7 @@ export class Ripple {
   resize(stageWidth: number, stageHeight: number) {
     this.stageWidth = stageWidth;
     this.stageHeight = stageHeight;
+    this.maxRadius = this.getMax(this.x, this.y);
   }
 
   animate() {
