@@ -56,6 +56,7 @@ function ProblemRecommend() {
   // 휠 이벤트 핸들러입니다.
   const handleWheel = useCallback(
     (e: WheelEvent) => {
+      if (isDetailPage) return;
       if (draggable) {
         setDraggable(false);
         const direction = e.deltaY > 0 ? "DOWN" : "UP";
@@ -75,7 +76,7 @@ function ProblemRecommend() {
         console.log("blocking wheel");
       }
     },
-    [draggable]
+    [draggable, isDetailPage]
   );
 
   const renderContainer = (searchState: SearchState) => {
