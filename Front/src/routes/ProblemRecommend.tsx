@@ -18,6 +18,7 @@ import { routes } from "../App";
 import ProblemDetail from "../components/ProblemDetail";
 import { ProblemMetadata, SearchState } from "../redux/state";
 import { setSearchState } from "../redux/slices/problemRecommendSlice";
+import StaticMosaic from "../components/StaticMosaic";
 
 function ProblemRecommend() {
   const dispatch = useDispatch();
@@ -32,6 +33,9 @@ function ProblemRecommend() {
 
   // maxIndex에 대한 현재 인덱스 스테이트입니다.
   const [curIndex, setCurIndex] = useState(0);
+
+  // 리플 모자이크 최적화 스테이트
+  const [isRippleRun, setIsRippleRun] = useState(true);
 
   const currentUserName = useCombinedStateSelector(
     (state) => state.userState.currentUserName
@@ -79,7 +83,7 @@ function ProblemRecommend() {
       return (
         <div className="w-full h-screen" key={"clicked"}>
           {/* 바둑판 배경 */}
-          <RippleMosaic delay={0.5} />
+          {isRippleRun ? <RippleMosaic delay={0.5} /> : <StaticMosaic />}
           <div className="absolute top-0 left-0 w-full h-screen overflow-hidden">
             {/* 문제 카드들 한 페이지당 3개씩 넣어둠. */}
             <ProblemCards curIndex={curIndex} maxIndex={maxIndex} />
@@ -99,12 +103,22 @@ function ProblemRecommend() {
   };
 
   // 드래그를 1초에 한번씩 할 수 있게 하는 인터벌 내부에 들어가는 핸들러입니다.
+  const handleRippleRun = useCallback(() => {
+    setIsRippleRun((prev) => !prev);
+  }, [setIsRippleRun]);
+
+  // 드래그를 1초에 한번씩 할 수 있게 하는 인터벌 내부에 들어가는 핸들러입니다.
   const handleDragable = useCallback(() => {
     setDraggable((prev) => !prev);
   }, [setDraggable]);
 
   // 드래그를 1초에 한번씩만 할 수 있게 하는 코드입니다.
   useInterval(handleDragable, !draggable ? 1000 : null);
+
+  useInterval(
+    handleRippleRun,
+    searchState === SearchState.SHOW && isRippleRun ? 3000 : null
+  );
 
   // 페이지 전체에 휠 이벤트를 거는 코드입니다.
   useEffect(() => {
