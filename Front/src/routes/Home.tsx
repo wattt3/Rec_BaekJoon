@@ -13,37 +13,37 @@ import {
 } from "../components/Svgs";
 import UserNameInput from "../components/UserNameInput";
 
-const svgData = [
-  FingerPrintSvg,
-  GlobeAltSvg,
-  LinkSvg,
-  MicrophoneSvg,
-  PaperClipSvg,
-  FingerPrintSvg,
-  GlobeAltSvg,
-  LinkSvg,
-  MicrophoneSvg,
-  PaperClipSvg,
-  FingerPrintSvg,
-  GlobeAltSvg,
-  LinkSvg,
-  MicrophoneSvg,
-  PaperClipSvg,
-  FingerPrintSvg,
-  GlobeAltSvg,
-  LinkSvg,
-  MicrophoneSvg,
-  PaperClipSvg,
-  FingerPrintSvg,
-  GlobeAltSvg,
-  LinkSvg,
-  MicrophoneSvg,
-  PaperClipSvg,
-  FingerPrintSvg,
-  GlobeAltSvg,
-  LinkSvg,
-  MicrophoneSvg,
-  PaperClipSvg,
+const sliderData = [
+  { svg: FingerPrintSvg, title: "Hierarchical Structure" },
+  { svg: GlobeAltSvg, title: "저 집합은 해로운 집합이다" },
+  { svg: LinkSvg, title: "소수 구하기" },
+  { svg: MicrophoneSvg, title: "기상청 인턴 신현수" },
+  { svg: PaperClipSvg, title: "Improvements" },
+  { svg: FingerPrintSvg, title: "Intergalactic Bidding" },
+  { svg: GlobeAltSvg, title: "암호 깨기" },
+  { svg: LinkSvg, title: "숫자 맞추기" },
+  { svg: MicrophoneSvg, title: "뒤집음" },
+  { svg: PaperClipSvg, title: "행복 유치원" },
+  { svg: FingerPrintSvg, title: "Database of Clients" },
+  { svg: GlobeAltSvg, title: "Paint By Numbers" },
+  { svg: LinkSvg, title: "죄수에게 주는 뇌물" },
+  { svg: MicrophoneSvg, title: "부분 수열의 점수" },
+  { svg: PaperClipSvg, title: "갤러리" },
+  { svg: FingerPrintSvg, title: "Winter Olympic Games" },
+  { svg: GlobeAltSvg, title: "Checkers" },
+  { svg: LinkSvg, title: "욱제는 결벽증이야!!" },
+  { svg: MicrophoneSvg, title: "D-Day" },
+  { svg: PaperClipSvg, title: "병사 배치하기" },
+  { svg: FingerPrintSvg, title: "변신 이동 게임" },
+  { svg: GlobeAltSvg, title: "Inglish-Number Translator" },
+  { svg: LinkSvg, title: "Hidden Anagrams" },
+  { svg: MicrophoneSvg, title: "Play Games with Rounddog" },
+  { svg: PaperClipSvg, title: "큰 수 구성하기" },
+  { svg: FingerPrintSvg, title: "자동차경주대회" },
+  { svg: GlobeAltSvg, title: "Elections" },
+  { svg: LinkSvg, title: "Combinations" },
+  { svg: MicrophoneSvg, title: "가장 큰 직사각형" },
+  { svg: PaperClipSvg, title: "New Year and Social Network" },
 ];
 
 const DialogAnimation: Variants = {
@@ -142,14 +142,15 @@ function Home() {
                 repeat: Infinity,
               },
             }}
-            style={{ width: `${24 * svgData.length}rem` }}
+            style={{ width: `${24 * sliderData.length}rem` }}
             className="h-full flex"
           >
-            {svgData.map((_, i) => (
+            {sliderData.map((_, i) => (
               <HomeSliderItem
                 key={i}
-                title={`문제 ${i + 1}`}
-                svg={svgData[i]()}
+                color={i % 3 === 0 ? "indigo" : i % 3 === 1 ? "rose" : "teal"}
+                title={sliderData[i].title}
+                svg={sliderData[i].svg}
               />
             ))}
           </motion.div>

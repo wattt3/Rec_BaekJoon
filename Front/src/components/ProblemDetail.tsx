@@ -93,7 +93,7 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
         .map((tag) => tag.displayNames[0].name)
         .map((tagName, index) => (
           <span
-            className={`px-2 py-1 ${darkerBgColor}  rounded-full text-white font-medium`}
+            className={`px-2 py-1 ${darkerBgColor} text-xs lg:text-base  rounded-full text-white font-medium`}
             key={index}
           >
             {tagName}
@@ -145,10 +145,10 @@ const ProblemDetail: React.FC<IProblemDetail> = ({ color }) => {
           className={`w-full h-full ${bgColor} rounded-tl-3xl rounded-tr-3xl p-10`}
         >
           <div className="w-full h-full flex flex-col gap-5 items-start">
-            <div className="text-5xl font-semibold text-white">
+            <div className="text-3xl lg:text-5xl font-semibold text-white">
               {currentProblemMetadata?.title}
             </div>
-            <div className="flex flex-wrap w-full justify-start items-center gap-3">
+            <div className="flex flex-wrap w-full justify-start items-center gap-1 lg:gap-3">
               {tagItemList}
             </div>
             {/* 문제 디테일에서 가운데 뚫린 부분 컨테이너 */}

@@ -1,4 +1,4 @@
-const svgDefaultStyle = `h-32 w-32 fill-indigo-500`;
+const svgDefaultStyle = `h-32 w-32`;
 
 export const FingerPrintSvg = () => {
   return (
